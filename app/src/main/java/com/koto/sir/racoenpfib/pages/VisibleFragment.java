@@ -22,15 +22,20 @@ public abstract class VisibleFragment extends Fragment {
         @Override
         public void onReceive(Context context, Intent intent) {
             Log.i(TAG, "Canceling notification");
+            boolean b = false;
             if (getResultCode() == Activity.RESULT_OK) {
-                //TODO canviar el toast per una barra inferior, o alguna cosa més descriptiva
-                Toast.makeText(context, R.string.new_notification, Toast.LENGTH_LONG).show();
                 setResultCode(Activity.RESULT_CANCELED);
+                b = true;
             }
             UUID uuid = (UUID) intent.getSerializableExtra(AvisosWorker.UNIQUE_IDENTIFIER);
             if (uuid != mUUID) {
                 OnNewDataFound();
                 mUUID = uuid;
+
+                if (b) {
+                    //TODO canviar el toast per una barra inferior, o alguna cosa més descriptiva
+                    Toast.makeText(context, R.string.new_notification, Toast.LENGTH_LONG).show();
+                }
             }
         }
     };

@@ -26,6 +26,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.locks.ReentrantLock;
 
 import androidx.work.Constraints;
 import androidx.work.ExistingPeriodicWorkPolicy;
@@ -48,8 +49,8 @@ public class AvisosWorker extends Worker {
 
 
     private static final String URL = "https://api.fib.upc.edu/v2/jo/avisos/";
-
     private static final String TAG = "AvisosWorker";
+    private static ReentrantLock sLock = new ReentrantLock();
 
     public AvisosWorker(@NonNull Context context, @NonNull WorkerParameters workerParams) {
         super(context, workerParams);
@@ -73,6 +74,7 @@ public class AvisosWorker extends Worker {
     @Override
     public Result doWork() {
         if (!isNetworkAvailableAndConnected()) return Result.failure();
+        sLock.lock();
         String dataJson = new Fetchr().getDataUrlJson(URL);
         Log.d(TAG, "dataJson: " + dataJson);
         final long last = QueryData.getLastUpdatedAvis();
@@ -106,6 +108,7 @@ public class AvisosWorker extends Worker {
         if (newer != last) {
 
             QueryData.setLastUpdatedAvis(newer);
+            sLock.unlock();
 
             //CREEM LA NOTIFICACIO
             UUID uuid = UUID.randomUUID();
@@ -130,7 +133,8 @@ public class AvisosWorker extends Worker {
             }
 
 
-        }
+        } else
+            sLock.unlock();
 
         return Result.success();
     }
