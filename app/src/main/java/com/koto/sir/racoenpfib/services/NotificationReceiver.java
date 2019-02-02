@@ -21,7 +21,7 @@ public class NotificationReceiver extends BroadcastReceiver {
 
         int requestCode = intent.getIntExtra(AvisosWorker.REQUEST_CODE, 0);
         Notification notification = intent.getParcelableExtra(AvisosWorker.NOTIFICATION);
-        Log.d(TAG, "Notification " + notification.toString());
+        Log.d(TAG, "Notification " + notification);
         NotificationManagerCompat.from(context)
                 .notify(requestCode, notification);
 

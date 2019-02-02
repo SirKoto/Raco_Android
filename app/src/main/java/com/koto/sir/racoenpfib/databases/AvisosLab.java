@@ -20,6 +20,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
 import java.util.concurrent.locks.ReentrantLock;
 
@@ -231,7 +232,7 @@ public class AvisosLab {
 
     public Avis getAvis(UUID uuid) {
         Avis avis = null;
-
+        Log.d(TAG, "GetAvis " + uuid.toString());
         try (AvisCursorWrapper cursor = queryAvisos(
                 AvisosTable.Cols.UUID + " = ?",
                 new String[]{uuid.toString()},
@@ -241,7 +242,7 @@ public class AvisosLab {
             if(!cursor.isAfterLast())
                 avis = cursor.getAvis();
         }
-
+        Log.d(TAG, "Avis trobat " + Objects.requireNonNull(avis).getUid());
         return avis;
     }
 

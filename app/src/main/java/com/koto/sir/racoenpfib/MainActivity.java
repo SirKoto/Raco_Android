@@ -9,6 +9,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 
 import com.koto.sir.racoenpfib.services.AvisosWorker;
 
@@ -22,6 +23,7 @@ public class MainActivity extends SingleFragmentActivity {
     public static Intent newIntent(Context context, UUID uuid) {
         //TODO
         Intent intent = new Intent(context, MainActivity.class);
+        Log.d(TAG, "Avis uuid 1 " + uuid.toString());
         intent.putExtra(UUID_EXTRA, uuid);
         return intent;
     }
@@ -29,9 +31,24 @@ public class MainActivity extends SingleFragmentActivity {
     @Override
     protected Fragment createFragment() {
         UUID uuid = (UUID) getIntent().getSerializableExtra(UUID_EXTRA);
+        Log.d(TAG, "createFragment " + (uuid != null));
         return PagerFragment.newInstance(uuid);
     }
 
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        UUID uuid = (UUID) intent.getSerializableExtra(UUID_EXTRA);
+        if (uuid != null) {
+            Log.d(TAG, "Avis uuid 2 " + uuid.toString());
+            Fragment fragment = PagerFragment.newInstance(uuid);
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.fragment_container, fragment)
+                    .commit();
+        }
+
+
+    }
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {

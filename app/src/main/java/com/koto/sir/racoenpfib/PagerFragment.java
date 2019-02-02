@@ -53,7 +53,7 @@ public class PagerFragment extends Fragment implements PagerManager.CallbackMana
 
         Bundle arg = getArguments();
         if (arg != null) {
-            mUUID = (UUID) getArguments().getSerializable(ARG_UUID);
+            mUUID = (UUID) arg.getSerializable(ARG_UUID);
         }
     }
 
@@ -66,6 +66,16 @@ public class PagerFragment extends Fragment implements PagerManager.CallbackMana
             loadPages();
             mViewPager.getAdapter().notifyDataSetChanged();
             mNeedsRefresh = false;
+        }
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        if (mUUID != null) {
+            mViewPager.setCurrentItem(PagerManager.get().getAvisPos());
+            loadPages();
+            mUUID = null;
         }
     }
 
@@ -137,11 +147,10 @@ public class PagerFragment extends Fragment implements PagerManager.CallbackMana
 
     public void loadPages() {
         mPages.clear();
+        if (mUUID != null) Log.d(TAG, "loadPages: " + mUUID.toString());
+        else Log.d(TAG, "loadPages UUID null");
         mPages.addAll(PagerManager.get().getFragments(mUUID));
-        if (mUUID != null) {
-            mViewPager.setCurrentItem(PagerManager.get().getAvisPos());
-            mUUID = null;
-        }
+
     }
 
     @Override

@@ -43,7 +43,7 @@ public class AvisosWorker extends Worker {
     public static final String NOTIFICATION = "NOTIFICATION";
     public static final String UNIQUE_IDENTIFIER = "IDENTIFIER_NOTIFICATION";
     public static final String ACTION_SHOW_NOTIFICATION = "com.koto.sir.racoenpfib.SHOW_NOTIFICATION";
-    public static final String GROUP_KEY = "com.koto.sir.racoenpfib.GROUP_KEY";
+    public static final String GROUP_KEY = "com.koto.sir.racoenpfib.avisosworker.GROUP_KEY";
     public static final String PERM_PRIVATE = "com.koto.sir.racoenpfib.PRIVATE";
     public static final String CHANEL_ID = "com.koto.sir.racoenpfib.chanel_id_notification_avisos";
 
@@ -73,7 +73,7 @@ public class AvisosWorker extends Worker {
     @NonNull
     @Override
     public Result doWork() {
-        if (!isNetworkAvailableAndConnected()) return Result.failure();
+        if (!isNetworkAvailableAndConnected()) return Result.retry();
         sLock.lock();
         String dataJson = new Fetchr().getDataUrlJson(URL);
         Log.d(TAG, "dataJson: " + dataJson);
@@ -98,7 +98,7 @@ public class AvisosWorker extends Worker {
         } catch (JSONException e) {
             Log.e(TAG, "Error en la creacio d'avisos", e);
             //Desem que es provable que hi hagui error ja que no hi ha login
-            return Result.failure();
+            return Result.retry();
         }
         //Guardar tots els nous avisos modificats
         Log.d(TAG, "avisos renovats: " + renovats.toString());
@@ -113,8 +113,9 @@ public class AvisosWorker extends Worker {
             //CREEM LA NOTIFICACIO
             UUID uuid = UUID.randomUUID();
             for (Avis avis : renovats) {
+                Log.d(TAG, "Avis uuid " + avis.getUid().toString());
                 Intent i = MainActivity.newIntent(getApplicationContext(), avis.getUid());
-                PendingIntent pi = PendingIntent.getActivity(getApplicationContext(), 0, i, 0);
+                PendingIntent pi = PendingIntent.getActivity(getApplicationContext(), avis.getUid().hashCode(), i, 0);
 
                 Notification notification = new NotificationCompat.Builder(getApplicationContext(), CHANEL_ID)
                         .setTicker(avis.getTitol())
@@ -129,7 +130,7 @@ public class AvisosWorker extends Worker {
                         .setAutoCancel(true)
                         .build();
                 Log.d(TAG, "showBackgroundNotification " + avis.getTitol());
-                showBackgroundNotification(0, notification, uuid);
+                showBackgroundNotification(avis.getUid().hashCode(), notification, uuid);
             }
 
 
