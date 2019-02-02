@@ -26,6 +26,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.locks.ReentrantLock;
 
 import androidx.work.Constraints;
 import androidx.work.ExistingPeriodicWorkPolicy;
@@ -42,37 +43,38 @@ public class AvisosWorker extends Worker {
     public static final String NOTIFICATION = "NOTIFICATION";
     public static final String UNIQUE_IDENTIFIER = "IDENTIFIER_NOTIFICATION";
     public static final String ACTION_SHOW_NOTIFICATION = "com.koto.sir.racoenpfib.SHOW_NOTIFICATION";
-    public static final String GROUP_KEY = "com.koto.sir.racoenpfib.GROUP_KEY";
+    public static final String GROUP_KEY = "com.koto.sir.racoenpfib.avisosworker.GROUP_KEY";
     public static final String PERM_PRIVATE = "com.koto.sir.racoenpfib.PRIVATE";
     public static final String CHANEL_ID = "com.koto.sir.racoenpfib.chanel_id_notification_avisos";
-    private static final long POLL_INTERVAL_MS = TimeUnit.MINUTES.toMillis(10);
-    private static final long POLL_INTERVAL_MS_FAST = TimeUnit.MINUTES.toMillis(1);
+
 
     private static final String URL = "https://api.fib.upc.edu/v2/jo/avisos/";
-
     private static final String TAG = "AvisosWorker";
+    private static ReentrantLock sLock = new ReentrantLock();
 
     public AvisosWorker(@NonNull Context context, @NonNull WorkerParameters workerParams) {
         super(context, workerParams);
     }
 
-    public static void SetRecurrentWork(boolean isFast) {
+    public static void SetRecurrentWork() {
         PeriodicWorkRequest request = new PeriodicWorkRequest.Builder(AvisosWorker.class,
-                isFast ? POLL_INTERVAL_MS_FAST : POLL_INTERVAL_MS,
+                PeriodicWorkRequest.MIN_PERIODIC_INTERVAL_MILLIS,
                 TimeUnit.MILLISECONDS)
                 .setConstraints(new Constraints.Builder()
                         .setRequiredNetworkType(NetworkType.CONNECTED)
-                        .build()).build();
+                        .build())
+                .build();
         WorkManager.getInstance().enqueueUniquePeriodicWork(
                 TAG,
-                ExistingPeriodicWorkPolicy.REPLACE,
+                ExistingPeriodicWorkPolicy.KEEP,
                 request);
     }
 
     @NonNull
     @Override
     public Result doWork() {
-        if (!isNetworkAvailableAndConnected()) return Result.failure();
+        if (!isNetworkAvailableAndConnected()) return Result.retry();
+        sLock.lock();
         String dataJson = new Fetchr().getDataUrlJson(URL);
         Log.d(TAG, "dataJson: " + dataJson);
         final long last = QueryData.getLastUpdatedAvis();
@@ -96,7 +98,7 @@ public class AvisosWorker extends Worker {
         } catch (JSONException e) {
             Log.e(TAG, "Error en la creacio d'avisos", e);
             //Desem que es provable que hi hagui error ja que no hi ha login
-            return Result.failure();
+            return Result.retry();
         }
         //Guardar tots els nous avisos modificats
         Log.d(TAG, "avisos renovats: " + renovats.toString());
@@ -106,12 +108,14 @@ public class AvisosWorker extends Worker {
         if (newer != last) {
 
             QueryData.setLastUpdatedAvis(newer);
+            sLock.unlock();
 
             //CREEM LA NOTIFICACIO
             UUID uuid = UUID.randomUUID();
             for (Avis avis : renovats) {
+                Log.d(TAG, "Avis uuid " + avis.getUid().toString());
                 Intent i = MainActivity.newIntent(getApplicationContext(), avis.getUid());
-                PendingIntent pi = PendingIntent.getActivity(getApplicationContext(), 0, i, 0);
+                PendingIntent pi = PendingIntent.getActivity(getApplicationContext(), avis.getUid().hashCode(), i, 0);
 
                 Notification notification = new NotificationCompat.Builder(getApplicationContext(), CHANEL_ID)
                         .setTicker(avis.getTitol())
@@ -126,11 +130,12 @@ public class AvisosWorker extends Worker {
                         .setAutoCancel(true)
                         .build();
                 Log.d(TAG, "showBackgroundNotification " + avis.getTitol());
-                showBackgroundNotification(0, notification, uuid);
+                showBackgroundNotification(avis.getUid().hashCode(), notification, uuid);
             }
 
 
-        }
+        } else
+            sLock.unlock();
 
         return Result.success();
     }

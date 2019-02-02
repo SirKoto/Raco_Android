@@ -21,7 +21,8 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
 
-        <activity android:name=".MainActivity">
+        <activity android:name=".MainActivity"
+            android:launchMode="singleTask">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -43,11 +44,6 @@
                     android:scheme="apifib" />
             </intent-filter>
         </activity>
-
-        <service
-            android:name=".services.AvisosService"
-            android:enabled="true"
-            android:exported="false"/>
 
         <receiver android:name=".services.StartupReceiver">
             <intent-filter>

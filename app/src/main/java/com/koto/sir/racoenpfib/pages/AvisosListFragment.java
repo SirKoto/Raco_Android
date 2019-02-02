@@ -1,5 +1,6 @@
 package com.koto.sir.racoenpfib.pages;
 
+import android.arch.lifecycle.Observer;
 import android.content.Context;
 import android.content.res.Resources;
 import android.os.Build;
@@ -25,7 +26,6 @@ import com.koto.sir.RacoEnpFibApp;
 import com.koto.sir.racoenpfib.R;
 import com.koto.sir.racoenpfib.databases.AvisosLab;
 import com.koto.sir.racoenpfib.models.Avis;
-import com.koto.sir.racoenpfib.services.AvisosService;
 import com.koto.sir.racoenpfib.services.AvisosWorker;
 
 import java.text.DateFormat;
@@ -33,6 +33,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import androidx.work.OneTimeWorkRequest;
+import androidx.work.WorkInfo;
 import androidx.work.WorkManager;
 
 public class AvisosListFragment extends VisibleFragment {
@@ -125,13 +126,23 @@ public class AvisosListFragment extends VisibleFragment {
         OneTimeWorkRequest reload = new OneTimeWorkRequest.Builder(AvisosWorker.class).build();
         WorkManager.getInstance().enqueue(reload);
 
-        new Handler().postDelayed(new Runnable() {
+        WorkManager.getInstance().getWorkInfoByIdLiveData(reload.getId())
+                .observe(getViewLifecycleOwner(), new Observer<WorkInfo>() {
+                    @Override
+                    public void onChanged(@Nullable WorkInfo workInfo) {
+                        if (workInfo != null && workInfo.getState().isFinished()) {
+                            mSwipeRefreshLayout.setRefreshing(false);
+                        }
+                    }
+                });
+
+      /*  new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
                 //TODO: check si encara esta funcionant el service o posar el Broadcast
                 mSwipeRefreshLayout.setRefreshing(false);
             }
-        }, 200);
+        }, 200);*/
     }
 
     private void setupAdapter(List<Avis> avisList) {
