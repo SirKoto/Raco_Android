@@ -8,12 +8,9 @@ import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 
-import com.koto.sir.RacoEnpFibApp;
-import com.koto.sir.racoenpfib.services.AvisosService;
+import com.koto.sir.racoenpfib.services.AvisosWorker;
 
 import java.util.UUID;
 
@@ -35,18 +32,13 @@ public class MainActivity extends SingleFragmentActivity {
         return PagerFragment.newInstance(uuid);
     }
 
-    @Override
-    protected void onStart() {
-        super.onStart();
-        AvisosService.toggleAlarm(RacoEnpFibApp.getAppContext(), true);
-    }
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             //TODO NO MIRAR AIXO SEMPRE; NOMES SI EL CANAL NO ESTÀ CREAT
-            NotificationChannel channel = new NotificationChannel(AvisosService.CHANEL_ID, "Avisos poll", NotificationManager.IMPORTANCE_HIGH);
+            NotificationChannel channel = new NotificationChannel(AvisosWorker.CHANEL_ID, "Avisos poll", NotificationManager.IMPORTANCE_HIGH);
             channel.setDescription("Poll the API to get new notifications");
             channel.enableLights(true);
             channel.enableVibration(true);
@@ -54,12 +46,12 @@ public class MainActivity extends SingleFragmentActivity {
             channel.setLockscreenVisibility(Notification.VISIBILITY_PUBLIC);
             getSystemService(NotificationManager.class).createNotificationChannel(channel);
         }
+        AvisosWorker.SetRecurrentWork();
     }
 
 
     @Override
     protected void onStop() {
         super.onStop();
-        AvisosService.toggleAlarm(RacoEnpFibApp.getAppContext(), false);
     }
 }

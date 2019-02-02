@@ -44,11 +44,6 @@
             </intent-filter>
         </activity>
 
-        <service
-            android:name=".services.AvisosService"
-            android:enabled="true"
-            android:exported="false"/>
-
         <receiver android:name=".services.StartupReceiver">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />

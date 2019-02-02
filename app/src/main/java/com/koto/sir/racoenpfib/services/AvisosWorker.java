@@ -45,8 +45,7 @@ public class AvisosWorker extends Worker {
     public static final String GROUP_KEY = "com.koto.sir.racoenpfib.GROUP_KEY";
     public static final String PERM_PRIVATE = "com.koto.sir.racoenpfib.PRIVATE";
     public static final String CHANEL_ID = "com.koto.sir.racoenpfib.chanel_id_notification_avisos";
-    private static final long POLL_INTERVAL_MS = TimeUnit.MINUTES.toMillis(10);
-    private static final long POLL_INTERVAL_MS_FAST = TimeUnit.MINUTES.toMillis(1);
+
 
     private static final String URL = "https://api.fib.upc.edu/v2/jo/avisos/";
 
@@ -56,16 +55,17 @@ public class AvisosWorker extends Worker {
         super(context, workerParams);
     }
 
-    public static void SetRecurrentWork(boolean isFast) {
+    public static void SetRecurrentWork() {
         PeriodicWorkRequest request = new PeriodicWorkRequest.Builder(AvisosWorker.class,
-                isFast ? POLL_INTERVAL_MS_FAST : POLL_INTERVAL_MS,
+                PeriodicWorkRequest.MIN_PERIODIC_INTERVAL_MILLIS,
                 TimeUnit.MILLISECONDS)
                 .setConstraints(new Constraints.Builder()
                         .setRequiredNetworkType(NetworkType.CONNECTED)
-                        .build()).build();
+                        .build())
+                .build();
         WorkManager.getInstance().enqueueUniquePeriodicWork(
                 TAG,
-                ExistingPeriodicWorkPolicy.REPLACE,
+                ExistingPeriodicWorkPolicy.KEEP,
                 request);
     }
 

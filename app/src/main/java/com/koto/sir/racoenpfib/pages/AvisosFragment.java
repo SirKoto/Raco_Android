@@ -24,7 +24,6 @@ import android.view.ViewGroup;
 import com.koto.sir.racoenpfib.R;
 import com.koto.sir.racoenpfib.databases.AvisosLab;
 import com.koto.sir.racoenpfib.models.Avis;
-import com.koto.sir.racoenpfib.services.AvisosService;
 import com.koto.sir.racoenpfib.services.AvisosWorker;
 
 import java.util.List;

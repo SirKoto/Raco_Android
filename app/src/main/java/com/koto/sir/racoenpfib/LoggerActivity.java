@@ -7,11 +7,10 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.widget.Toast;
 
-import com.koto.sir.RacoEnpFibApp;
 import com.koto.sir.racoenpfib.databases.AuthState;
 import com.koto.sir.racoenpfib.databases.PagerManager;
 import com.koto.sir.racoenpfib.databases.QueryData;
-import com.koto.sir.racoenpfib.services.AvisosService;
+import com.koto.sir.racoenpfib.services.AvisosWorker;
 
 import static com.koto.sir.racoenpfib.databases.AuthState.REDIRECT_URI;
 
@@ -63,8 +62,8 @@ public class LoggerActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        if (QueryData.getAuthState() != null && !AvisosService.isServiceOn(this)) {
-            AvisosService.setServiceAlarmOn(RacoEnpFibApp.getAppContext(), true);
+        if (QueryData.getAuthState() != null) {
+            AvisosWorker.SetRecurrentWork();
             Log.d(TAG, "Alarma activada a onDestroy de LoggerAct");
         }
     }
