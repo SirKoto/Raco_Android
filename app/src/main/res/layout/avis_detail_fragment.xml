@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <android.support.design.card.MaterialCardView
+        android:id="@+id/card_relative_layour"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:transitionName="nomRandomTemporal">
+
+        <RelativeLayout
+            android:id="@+id/title_relative_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_marginTop="5dp"
+            android:background="@color/colorPrimary">
+
+            <ImageButton
+                android:id="@+id/back_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:background="@color/colorPrimary"
+                android:padding="10dp"
+                android:paddingStart="10dp"
+                android:paddingEnd="10dp"
+                android:src="@drawable/twotone_arrow_back_black_48"
+                android:tint="@color/colorOnPrimary" />
+
+            <android.support.v7.widget.AppCompatTextView
+                android:id="@+id/title_card_avis"
+                style="@style/TextAppearance.MaterialComponents.Headline3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_toEndOf="@id/back_button"
+                android:background="@color/colorPrimary"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:textColor="@color/colorOnPrimary"
+                tools:text="LP" />
+        </RelativeLayout>
+    </android.support.design.card.MaterialCardView>
+
+
+    <RelativeLayout xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/item_general"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:elevation="9dp">
+
+        <android.support.v7.widget.AppCompatTextView
+            android:id="@+id/nom_assig"
+            style="@style/TextAppearance.MaterialComponents.Subtitle1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_toStartOf="@+id/images_linear_layout"
+            android:textAlignment="viewStart"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="Notes provisionals examen final i pràctica obligatòria de Python" />
+
+        <android.support.v7.widget.LinearLayoutCompat
+            android:id="@+id/images_linear_layout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_marginEnd="8dp"
+            android:orientation="vertical"
+            tools:layout_editor_absoluteY="8dp">
+
+            <android.support.v7.widget.AppCompatImageView
+                android:id="@+id/image_no_vist"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:srcCompat="@drawable/twotone_announcement_black_36" />
+
+            <android.support.v7.widget.AppCompatImageView
+                android:id="@+id/image_te_document"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:srcCompat="@drawable/twotone_description_black_36" />
+
+        </android.support.v7.widget.LinearLayoutCompat>
+
+        <android.support.v7.widget.LinearLayoutCompat
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/nom_assig"
+            android:layout_alignStart="@id/nom_assig"
+            android:layout_marginEnd="10dp"
+            android:layout_toStartOf="@id/images_linear_layout"
+            android:gravity="end"
+            android:orientation="horizontal">
+
+            <android.support.v7.widget.AppCompatTextView
+                android:id="@+id/data_inserit"
+                style="@style/TextAppearance.MaterialComponents.Body2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                tools:text="10 Jun 2018" />
+
+            <android.support.v7.widget.AppCompatTextView
+                style="@style/TextAppearance.MaterialComponents.Caption"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="15dp"
+                android:text="@string/modification_text" />
+
+            <android.support.v7.widget.AppCompatTextView
+                android:id="@+id/data_modificat"
+                style="@style/TextAppearance.MaterialComponents.Body2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="5dp"
+                tools:text="11 Jun 2018" />
+        </android.support.v7.widget.LinearLayoutCompat>
+    </RelativeLayout>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:id="@+id/linear_layout_detail"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <android.support.v7.widget.AppCompatTextView
+                android:id="@+id/text_detail_avis"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:linksClickable="true"
+                android:paddingStart="8dp"
+                android:paddingEnd="8dp"
+                tools:text="Si et queden assignatures obligatories d'especialitat o bé aquest proper quadrimestre has de triar l'especialitat, no oblidisque per assegurar placcedil;a en un grup concret hauràs de fer la prematriacute;cula al Racó.L'aplicació de prematriacute;cula estarà disponible des de dimarts dia 29 a les 10:00 fins dimecres 30 a les 14:00. En funció dels grups triats,s'intentarà obrir suficients places perque ninguacute; es quedi sense lloc. Entre dijous 31 a les 15:00 i divendres 1 a les 14:00, es podran fer modificacions.
+Aquest any la segona fase té una restricció addicional: els estudiants només podran afegir a la seva prematriacute;cula assignatures amb places lliures o bé fer canvis de grup dintre de les assignatures prematriculades previament.https://www.fib.upc.edu/ca/estudis/secretaria/tramits/pre-matricula-de-les-assignatures-despecialitat-del-gei" />
+
+            <android.support.v7.widget.AppCompatTextView
+                android:id="@+id/files_separator"
+                style="@style/TextAppearance.MaterialComponents.Headline6"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="10dp"
+                android:layout_marginBottom="10dp"
+                android:drawableEnd="@drawable/twotone_description_black_36"
+                android:text="@string/files">
+
+            </android.support.v7.widget.AppCompatTextView>
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>

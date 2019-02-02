@@ -1,0 +1,4 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <dimen name="fab_margin">16dp</dimen>
+    <dimen name="mtrl_card_spacing" tools:override="true">8dp</dimen>
+</resources>

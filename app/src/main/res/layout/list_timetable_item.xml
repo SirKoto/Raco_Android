@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.LinearLayoutCompat xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <android.support.design.card.MaterialCardView
+        android:id="@+id/card_day"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:translationZ="10dp"
+        android:visibility="gone"
+        app:cardBackgroundColor="@color/colorSecondary">
+
+        <android.support.v7.widget.AppCompatTextView
+            android:id="@+id/textview_day"
+            style="@style/TextAppearance.MaterialComponents.Body1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:textColor="@color/colorOnSecondary"
+            tools:text="Dilluns" />
+
+    </android.support.design.card.MaterialCardView>
+
+    <android.support.design.card.MaterialCardView
+
+        style="@style/Widget.MaterialComponents.CardView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="2dp"
+        android:layout_marginTop="2dp"
+        android:layout_marginRight="2dp"
+        android:minHeight="50dp"
+
+        tools:ignore="PrivateResource">
+
+    <android.support.v7.widget.LinearLayoutCompat
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+    android:orientation="vertical" >
+        <!--android:animateLayoutChanges="true" Aixo es podria posar a dalt... crec-->
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginBottom="5dp"
+        android:gravity="bottom">
+
+        <android.support.v7.widget.AppCompatTextView
+            android:id="@+id/id_letter_assig"
+            style="@style/TextAppearance.MaterialComponents.Headline4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            tools:text="LP" />
+
+        <android.support.v7.widget.AppCompatTextView
+            android:id="@+id/aula_assig"
+            style="@style/TextAppearance.MaterialComponents.Subtitle1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginEnd="40dp"
+            android:layout_toStartOf="@id/frame_time_assig"
+            android:textAlignment="textStart"
+            tools:text="A5202" />
+
+        <android.support.v7.widget.AppCompatTextView
+            android:id="@+id/grup_assig"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@id/id_letter_assig"
+
+            android:layout_marginStart="2dp"
+            android:layout_toEndOf="@id/id_letter_assig"
+            tools:text="22" />
+
+        <android.support.v7.widget.AppCompatTextView
+            android:id="@+id/tipus_grup_assig"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+
+            android:layout_alignBottom="@id/id_letter_assig"
+            android:layout_marginStart="2dp"
+            android:layout_toEndOf="@id/grup_assig"
+
+            tools:text="L" />
+
+        <FrameLayout
+            android:id="@+id/frame_time_assig"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@id/id_letter_assig"
+            android:layout_alignBottom="@id/id_letter_assig"
+            android:layout_alignParentEnd="true"
+            android:background="@color/colorPrimary"
+            android:minWidth="65dp">
+
+            <android.support.v7.widget.AppCompatTextView
+                android:id="@+id/time_assig"
+                style="@style/TextAppearance.MaterialComponents.Headline6"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center|bottom"
+                android:layout_marginStart="5dp"
+                android:layout_marginEnd="5dp"
+                android:textColor="@color/colorOnPrimary"
+                tools:text="12-14" />
+        </FrameLayout>
+
+    </RelativeLayout>
+</android.support.v7.widget.LinearLayoutCompat>
+
+    </android.support.design.card.MaterialCardView></android.support.v7.widget.LinearLayoutCompat>

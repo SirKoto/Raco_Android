@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <android.support.v7.widget.AppCompatTextView
+        android:id="@+id/nom_assig"
+        style="@style/TextAppearance.MaterialComponents.Subtitle1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:textAlignment="viewStart"
+        android:layout_marginTop="8dp"
+        android:layout_toStartOf="@+id/images_linear_layout"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="Notes provisionals examen final i pràctica obligatòria de Python" />
+
+    <android.support.v7.widget.LinearLayoutCompat
+        android:id="@+id/images_linear_layout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_marginEnd="8dp"
+        android:orientation="vertical"
+        tools:layout_editor_absoluteY="8dp">
+
+        <android.support.v7.widget.AppCompatImageView
+            android:id="@+id/image_no_vist"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:srcCompat="@drawable/twotone_announcement_black_36" />
+
+        <android.support.v7.widget.AppCompatImageView
+            android:id="@+id/image_te_document"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:srcCompat="@drawable/twotone_description_black_36" />
+
+    </android.support.v7.widget.LinearLayoutCompat>
+
+    <android.support.v7.widget.LinearLayoutCompat
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/nom_assig"
+        android:layout_alignStart="@id/nom_assig"
+        android:layout_marginEnd="10dp"
+        android:layout_toStartOf="@id/images_linear_layout"
+        android:gravity="end"
+        android:orientation="horizontal">
+
+        <android.support.v7.widget.AppCompatTextView
+            android:id="@+id/data_inserit"
+            style="@style/TextAppearance.MaterialComponents.Body2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:text="10 Jun 2018" />
+
+        <android.support.v7.widget.AppCompatTextView
+            style="@style/TextAppearance.MaterialComponents.Caption"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="15dp"
+            android:text="@string/modification_text" />
+
+        <android.support.v7.widget.AppCompatTextView
+            android:id="@+id/data_modificat"
+            style="@style/TextAppearance.MaterialComponents.Body2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="5dp"
+            tools:text="11 Jun 2018" />
+    </android.support.v7.widget.LinearLayoutCompat>
+</RelativeLayout>

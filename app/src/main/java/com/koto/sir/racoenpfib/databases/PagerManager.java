@@ -1,0 +1,145 @@
+package com.koto.sir.racoenpfib.databases;
+
+import android.util.Log;
+
+import com.koto.sir.racoenpfib.LoggerFragment;
+import com.koto.sir.racoenpfib.AbstractPagerFragments;
+import com.koto.sir.racoenpfib.pages.AvisosFragment;
+import com.koto.sir.racoenpfib.pages.AvisosManagerFragment;
+import com.koto.sir.racoenpfib.pages.CalendarFragment;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
+
+public class PagerManager {
+    private static final String TAG = "PagerManager";
+    private static final int CALENDAR_PAGE = 1;
+    private static final int AVISOS_PAGE = 2;
+    private static final int CONFIG_PAGE = -1;
+    private static final int NUM_MAX_PAGES = 6;
+
+
+    private static PagerManager sPagerManager;
+    private List<Integer> mPagesIds = null;
+    private CallbackManager mCallback;
+    private int mAvisPos;
+
+    private PagerManager() {
+        mPagesIds = QueryData.getListPages();
+        if (mPagesIds == null) {
+            mPagesIds = new ArrayList<>();
+            mPagesIds.add(CALENDAR_PAGE);
+            mPagesIds.add(AVISOS_PAGE);
+            mPagesIds.add(CONFIG_PAGE);
+        }
+        Log.d(TAG, "PagerManager creadora" + mPagesIds.toString());
+    }
+
+    public static PagerManager get() {
+        if (sPagerManager == null) {
+            sPagerManager = new PagerManager();
+        }
+        return sPagerManager;
+    }
+
+    public int getPagesId(int pos) {
+        if (0 <= pos && pos <= mPagesIds.size()) {
+            return mPagesIds.get(pos);
+        }
+        return 0;
+    }
+
+    public void assignCallback(CallbackManager callback) {
+        mCallback = callback;
+    }
+
+    public void refresh() {
+        mCallback.onPagesChanged();
+    }
+
+    public void deletePage(int page) {
+        if (page == CONFIG_PAGE) return;
+        for (int i = 0; i < mPagesIds.size(); ++i)
+            if (mPagesIds.get(i) == page) {
+                mPagesIds.remove(i);
+                break;
+            }
+        QueryData.setListPages(mPagesIds);
+        mCallback.onPagesChanged();
+    }
+
+    public void movePage(int page, int position) {
+        if (position >= mPagesIds.size()) return;
+        int pos = 0;
+        boolean found = false;
+        while (pos < mPagesIds.size()) {
+            if (mPagesIds.get(pos) == page) {
+                found = true;
+                break;
+            }
+            pos++;
+        }
+        if (!found || pos == position) return;
+
+        mPagesIds.remove(pos);
+        if (pos < position)
+            mPagesIds.set(position - 1, page);
+        else
+            mPagesIds.set(position, page);
+
+        QueryData.setListPages(mPagesIds);
+        mCallback.onPagesChanged();
+    }
+
+    public void addPage(int page) {
+        if (mPagesIds.size() > NUM_MAX_PAGES) return;
+        boolean found = false;
+        int pos = 0;
+        while (pos < mPagesIds.size()) {
+            if (mPagesIds.get(pos) == page) {
+                found = true;
+                break;
+            }
+            pos++;
+        }
+        if (found)
+            mPagesIds.remove(pos);
+        mPagesIds.add(page);
+
+        QueryData.setListPages(mPagesIds);
+        mCallback.onPagesChanged();
+    }
+
+    public int getAvisPos() {
+        return mAvisPos;
+    }
+
+    public List<AbstractPagerFragments> getFragments(UUID uuid) {
+        ArrayList<AbstractPagerFragments> results = new ArrayList<>();
+        boolean b = QueryData.getAuthState() == null;
+        if (b) results.add(LoggerFragment.newInstance());
+        Log.d(TAG, "Boolean de token " + b);
+        for (int i = 0; i < mPagesIds.size(); ++i) {
+            switch (mPagesIds.get(i)) {
+                case CONFIG_PAGE:
+                    results.add(LoggerFragment.newInstance());
+                    break;
+                case CALENDAR_PAGE:
+                    results.add(CalendarFragment.newInstance());
+                    break;
+                case AVISOS_PAGE:
+                    mAvisPos = i;
+                    results.add(AvisosManagerFragment.newInstance(uuid));
+                    break;
+                default:
+            }
+        }
+        Log.d(TAG, "Get Fragments " + results);
+        return results;
+    }
+
+    public interface CallbackManager {
+        void onPagesChanged();
+    }
+}

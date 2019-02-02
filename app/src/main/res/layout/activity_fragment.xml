@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout
+        xmlns:andoid="http://schemas.android.com/apk/res/android"
+        andoid:id="@+id/fragment_container"
+        andoid:layout_width="match_parent"
+        andoid:layout_height="match_parent"/>
