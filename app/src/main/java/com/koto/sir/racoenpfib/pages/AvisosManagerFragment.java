@@ -41,6 +41,7 @@ public class AvisosManagerFragment extends AbstractPagerFragments
     private static final String INIT_FRAGMENT = "avisos.manager.koto.sir.data.fragment";
     private static final String ARG_DETAIL = "avisos.manager.koto.sir.dadesaUsar";
     private int mState;
+    private int mSizeStack = 0;
     private UUID mUUID;
 
     public static AvisosManagerFragment newInstance(UUID uuid) {
@@ -117,6 +118,7 @@ public class AvisosManagerFragment extends AbstractPagerFragments
 //                .setReorderingAllowed(true)
                 .addToBackStack(BACK_LIST_DETAIL)
                 .commit();
+        mSizeStack++;
     }
 
     @Override
@@ -131,6 +133,7 @@ public class AvisosManagerFragment extends AbstractPagerFragments
                 .replace(R.id.fragment_container, fragment)
                 .addToBackStack(null)
                 .commit();
+        mSizeStack++;
     }
 
     @Override
@@ -149,11 +152,14 @@ public class AvisosManagerFragment extends AbstractPagerFragments
                 .replace(R.id.fragment_container, fragment)
                 .addToBackStack(null)
                 .commit();
+        mSizeStack++;
     }
 
     @Override
     public void onBackPressedFromList(AppCompatTextView title) {
         String title_string = (String) title.getText();
+        mSizeStack--;
+
         Log.d(TAG, "onBackPressedFromList " + title_string);
 //        getChildFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment).addToBackStack(null).commit();
         getChildFragmentManager().popBackStack();
@@ -162,17 +168,14 @@ public class AvisosManagerFragment extends AbstractPagerFragments
     @Override
     public void onBackPressedFromDetail(Avis avis) {
         Log.d(TAG, "BackFromDetail " + (mState == DETAIL_VIEW));
-        if (mState == DETAIL_VIEW) {
-            Fragment fragment = AvisosFragment.newInstance();
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                fragment.setEnterTransition(new Slide(Gravity.BOTTOM).setDuration(300).setStartDelay(300));
-            }
-            getChildFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment)
-                    .commit();
-            mState = GENERAL_VIEW;
-        } else {
-            getChildFragmentManager().popBackStack();
-        }
+        mSizeStack--;
+        getChildFragmentManager().popBackStack();
+    }
 
+    public boolean onBackPressed() {
+        if (mSizeStack == 0) return false;
+        getChildFragmentManager().popBackStack();
+        mSizeStack--;
+        return true;
     }
 }

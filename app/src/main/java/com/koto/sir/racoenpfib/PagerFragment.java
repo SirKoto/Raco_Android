@@ -21,6 +21,7 @@ import android.view.ViewGroup;
 
 import com.koto.sir.racoenpfib.databases.PagerManager;
 import com.koto.sir.racoenpfib.databases.QueryData;
+import com.koto.sir.racoenpfib.pages.AvisosManagerFragment;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,7 +33,7 @@ public class PagerFragment extends Fragment implements PagerManager.CallbackMana
     private static final String ARG_UUID = "com.koto.sir.ARG_UUDI";
     private ViewPager mViewPager;
     private List<AbstractPagerFragments> mPages = new ArrayList<>();
-    private boolean mNeedsRefresh;
+    private boolean mNeedsRefresh, mAvisosPageSelected = false;
     private UUID mUUID;
 
 
@@ -127,6 +128,23 @@ public class PagerFragment extends Fragment implements PagerManager.CallbackMana
             }
         });
 
+        mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                mAvisosPageSelected = position == PagerManager.get().getAvisPos();
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
+
         mViewPager.setOffscreenPageLimit(OFFSCREEN_PAGE_LIMIT);
 
         TabLayout tabLayout = new TabLayout(getActivity());
@@ -136,6 +154,14 @@ public class PagerFragment extends Fragment implements PagerManager.CallbackMana
 
 
         return v;
+    }
+
+    public boolean onBackPressed() {
+        if (mAvisosPageSelected) {
+            AvisosManagerFragment fragment = (AvisosManagerFragment) mPages.get(PagerManager.get().getAvisPos());
+            return fragment.onBackPressed();
+        }
+        return false;
     }
 
     @Override

@@ -13,6 +13,7 @@ import android.util.Log;
 
 import com.koto.sir.racoenpfib.services.AvisosWorker;
 
+import java.util.List;
 import java.util.UUID;
 
 
@@ -33,6 +34,17 @@ public class MainActivity extends SingleFragmentActivity {
         UUID uuid = (UUID) getIntent().getSerializableExtra(UUID_EXTRA);
         Log.d(TAG, "createFragment " + (uuid != null));
         return PagerFragment.newInstance(uuid);
+    }
+
+    @Override
+    public void onBackPressed() {
+        List<Fragment> frlist = getSupportFragmentManager().getFragments();
+        Log.d(TAG, "Fragments fills " + frlist.size());
+        if (frlist.size() != 0) {
+            PagerFragment fragment = (PagerFragment) frlist.get(0);
+            if (fragment.onBackPressed()) return;
+        }
+        super.onBackPressed();
     }
 
     @Override
