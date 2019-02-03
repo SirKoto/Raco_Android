@@ -32,7 +32,7 @@ public class PagerManager {
         mPagesIds = QueryData.getListPages();
         if (mPagesIds == null) {
             mPagesIds = new ArrayList<>();
-            mPagesIds.add(CALENDAR_PAGE);
+//            mPagesIds.add(CALENDAR_PAGE);
             mPagesIds.add(AVISOS_PAGE);
             mPagesIds.add(CONFIG_PAGE);
         }

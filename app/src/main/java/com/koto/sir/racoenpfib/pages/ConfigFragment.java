@@ -1,5 +1,6 @@
 package com.koto.sir.racoenpfib.pages;
 
+import android.content.Intent;
 import android.content.res.TypedArray;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
@@ -10,6 +11,7 @@ import android.support.v7.widget.AppCompatImageView;
 import android.support.v7.widget.AppCompatTextView;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,6 +19,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.koto.sir.racoenpfib.AbstractPagerFragments;
+import com.koto.sir.racoenpfib.ConfigRedirectActivity;
 import com.koto.sir.racoenpfib.R;
 import com.koto.sir.racoenpfib.databases.PagerManager;
 
@@ -24,9 +27,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ConfigFragment extends AbstractPagerFragments {
-    private static final int[] sImageRes = new int[4];
-    private static final int[] sTitleRes = new int[4];
-    private static final int[] sInfoRes = new int[4];
+    public static final int[] sImageRes = new int[4];
+    public static final int[] sTitleRes = new int[4];
+    public static final int[] sInfoRes = new int[4];
+    private static final String TAG = "ConfigFragment";
 
     static {
         sTitleRes[PagerManager.CONFIG_PAGE] = R.string.configuration;
@@ -70,7 +74,7 @@ public class ConfigFragment extends AbstractPagerFragments {
         return R.drawable.twotone_home_black_24;
     }
 
-    private class ConfigHolder extends RecyclerView.ViewHolder {
+    private class ConfigHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         AppCompatImageView mCercle;
         AppCompatTextView mTitle;
         AppCompatTextView mInfo;
@@ -85,19 +89,30 @@ public class ConfigFragment extends AbstractPagerFragments {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 itemView.setForeground(getSelectedItemDrawable());
             }
+            itemView.setOnClickListener(this);
         }
 
         public void bind(int i) {
+            itemView.setTag(i);
             mCercle.setImageResource(sImageRes[i]);
             mTitle.setText(sTitleRes[i]);
             mInfo.setText(sInfoRes[i]);
         }
+
         private Drawable getSelectedItemDrawable() {
             int[] attrs = new int[]{R.attr.selectableItemBackground};
             TypedArray ta = getActivity().obtainStyledAttributes(attrs);
             Drawable selectedItemDrawable = ta.getDrawable(0);
             ta.recycle();
             return selectedItemDrawable;
+        }
+
+        @Override
+        public void onClick(View v) {
+            int tag = (int) v.getTag();
+            Log.i(TAG, "onClick viewTag: " + tag);
+            Intent intent = ConfigRedirectActivity.newIntent(getActivity(), tag);
+            startActivity(intent);
         }
     }
 

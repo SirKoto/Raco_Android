@@ -1,6 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout
-        xmlns:andoid="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:andoid="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    andoid:layout_width="match_parent"
+    andoid:layout_height="match_parent"
+    andoid:orientation="vertical">
+
+    <android.support.v7.widget.Toolbar
+        andoid:id="@+id/toolbar"
+        andoid:layout_width="match_parent"
+        andoid:layout_height="wrap_content"
+        andoid:background="?attr/colorPrimary"
+        andoid:minHeight="?attr/actionBarSize"
+        andoid:visibility="gone"
+        app:popupTheme="@style/AppTheme"
+        app:theme="@style/ToolbarColoredBackArrow" />
+
+    <FrameLayout
         andoid:id="@+id/fragment_container"
         andoid:layout_width="match_parent"
-        andoid:layout_height="match_parent"/>
+        andoid:layout_height="match_parent" />
+</LinearLayout>
