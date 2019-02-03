@@ -70,8 +70,8 @@ public class ConfigRedirectActivity extends SingleFragmentActivity {
 
         final Drawable upArrow;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            upArrow = getDrawable(R.drawable.abc_ic_ab_back_material);
-        } else upArrow = getResources().getDrawable(R.drawable.abc_ic_ab_back_material);
+            upArrow = getDrawable(R.drawable.ic_arrow_back_black_24dp);
+        } else upArrow = getResources().getDrawable(R.drawable.ic_arrow_back_black_24dp);
 
         try {
             upArrow.setColorFilter(Color.parseColor("#FFFFFF"), PorterDuff.Mode.SRC_ATOP);
