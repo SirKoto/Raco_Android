@@ -1,5 +1,6 @@
 package com.koto.sir.racoenpfib;
 
+import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Parcelable;
@@ -9,6 +10,7 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.app.FragmentStatePagerAdapter;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.text.Spannable;
@@ -115,6 +117,8 @@ public class PagerFragment extends Fragment implements PagerManager.CallbackMana
                     image = getActivity().getResources()
                             .getDrawable(res);
                 }
+                image.setColorFilter(ContextCompat.getColor(getActivity(), R.color.colorOnSecondary)
+                        , PorterDuff.Mode.MULTIPLY);
                 image.setBounds(0, 0, image.getIntrinsicWidth(), image.getIntrinsicHeight());
                 SpannableString sb = new SpannableString(" ");
                 ImageSpan imageSpan = new ImageSpan(image, ImageSpan.ALIGN_BOTTOM);
