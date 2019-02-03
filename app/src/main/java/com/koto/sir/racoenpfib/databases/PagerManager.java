@@ -7,6 +7,7 @@ import com.koto.sir.racoenpfib.AbstractPagerFragments;
 import com.koto.sir.racoenpfib.pages.AvisosFragment;
 import com.koto.sir.racoenpfib.pages.AvisosManagerFragment;
 import com.koto.sir.racoenpfib.pages.CalendarFragment;
+import com.koto.sir.racoenpfib.pages.ConfigFragment;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,10 +15,12 @@ import java.util.UUID;
 
 public class PagerManager {
     private static final String TAG = "PagerManager";
-    private static final int CALENDAR_PAGE = 1;
-    private static final int AVISOS_PAGE = 2;
-    private static final int CONFIG_PAGE = -1;
-    private static final int NUM_MAX_PAGES = 6;
+    public static final int CALENDAR_PAGE = 1;
+    public static final int AVISOS_PAGE = -1;
+    public static final int LAYOUT_MENU = 2;
+    public static final int RSS_MOVILITAT_PAGE = 3;
+    public static final int CONFIG_PAGE = 0;
+    public static final int NUM_MAX_PAGES = 6;
 
 
     private static PagerManager sPagerManager;
@@ -115,6 +118,19 @@ public class PagerManager {
         return mAvisPos;
     }
 
+    public List<Integer> getConfig() {
+        List<Integer> ret = new ArrayList<>();
+        if (!mPagesIds.contains(CALENDAR_PAGE))
+            ret.add(CALENDAR_PAGE);
+
+        if(!mPagesIds.contains(RSS_MOVILITAT_PAGE))
+            ret.add(RSS_MOVILITAT_PAGE);
+
+        ret.add(LAYOUT_MENU);
+        ret.add(CONFIG_PAGE);
+        return ret;
+    }
+
     public List<AbstractPagerFragments> getFragments(UUID uuid) {
         ArrayList<AbstractPagerFragments> results = new ArrayList<>();
         boolean b = QueryData.getAuthState() == null;
@@ -123,7 +139,7 @@ public class PagerManager {
         for (int i = 0; i < mPagesIds.size(); ++i) {
             switch (mPagesIds.get(i)) {
                 case CONFIG_PAGE:
-                    results.add(LoggerFragment.newInstance());
+                    results.add(ConfigFragment.newInstance());
                     break;
                 case CALENDAR_PAGE:
                     results.add(CalendarFragment.newInstance());

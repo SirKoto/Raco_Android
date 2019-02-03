@@ -11,4 +11,12 @@
     <string name="modification_text">Modif:</string>
     <string name="files">Files</string>
     <string name="new_notification">New Avis</string>
+    <string name="configuration">Configuration</string>
+    <string name="configure_info">Configure the application at your taste</string>
+    <string name="dashboard">Dashboard</string>
+    <string name="dashboard_info">Reorganize, delete or add pages to the dashboard</string>
+    <string name="calendar">Timetable</string>
+    <string name="calendar_info">Review your weekly schedule</string>
+    <string name="rss">RSS Mobility</string>
+    <string name="rss_info">Consult the latest news of mobility programs available to you</string>
 </resources>
