@@ -10,19 +10,18 @@ import com.koto.sir.racoenpfib.pages.CalendarFragment;
 import com.koto.sir.racoenpfib.pages.ConfigFragment;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
 public class PagerManager {
-    private static final String TAG = "PagerManager";
     public static final int CALENDAR_PAGE = 1;
     public static final int AVISOS_PAGE = -1;
     public static final int LAYOUT_MENU = 2;
     public static final int RSS_MOVILITAT_PAGE = 3;
     public static final int CONFIG_PAGE = 0;
     public static final int NUM_MAX_PAGES = 6;
-
-
+    private static final String TAG = "PagerManager";
     private static PagerManager sPagerManager;
     private List<Integer> mPagesIds = null;
     private CallbackManager mCallback;
@@ -32,7 +31,7 @@ public class PagerManager {
         mPagesIds = QueryData.getListPages();
         if (mPagesIds == null) {
             mPagesIds = new ArrayList<>();
-//            mPagesIds.add(CALENDAR_PAGE);
+            mPagesIds.add(CALENDAR_PAGE);
             mPagesIds.add(AVISOS_PAGE);
             mPagesIds.add(CONFIG_PAGE);
         }
@@ -46,11 +45,20 @@ public class PagerManager {
         return sPagerManager;
     }
 
+    public int getSizeInts() {
+        return mPagesIds.size();
+    }
+
     public int getPagesId(int pos) {
         if (0 <= pos && pos <= mPagesIds.size()) {
             return mPagesIds.get(pos);
         }
         return 0;
+    }
+
+    public void swap(int ini, int fi) {
+        Collections.swap(mPagesIds, ini, fi);
+        mCallback.onPagesChanged();
     }
 
     public void assignCallback(CallbackManager callback) {
@@ -62,12 +70,13 @@ public class PagerManager {
     }
 
     public void deletePage(int page) {
-        if (page == CONFIG_PAGE) return;
+        /*if (page == CONFIG_PAGE) return;
         for (int i = 0; i < mPagesIds.size(); ++i)
             if (mPagesIds.get(i) == page) {
                 mPagesIds.remove(i);
                 break;
-            }
+            }*/
+        mPagesIds.remove(page);
         QueryData.setListPages(mPagesIds);
         mCallback.onPagesChanged();
     }
@@ -123,7 +132,7 @@ public class PagerManager {
         if (!mPagesIds.contains(CALENDAR_PAGE))
             ret.add(CALENDAR_PAGE);
 
-        if(!mPagesIds.contains(RSS_MOVILITAT_PAGE))
+        if (!mPagesIds.contains(RSS_MOVILITAT_PAGE))
             ret.add(RSS_MOVILITAT_PAGE);
 
         ret.add(LAYOUT_MENU);

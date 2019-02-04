@@ -1,5 +1,6 @@
 package com.koto.sir.racoenpfib.pages;
 
+import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -8,6 +9,8 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.LevelListDrawable;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
@@ -25,6 +28,7 @@ import android.text.Html;
 import android.text.Spanned;
 import android.text.method.LinkMovementMethod;
 import android.util.Log;
+import android.util.LruCache;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -33,6 +37,7 @@ import com.koto.sir.racoenpfib.AbstractPagerFragments;
 import com.koto.sir.racoenpfib.R;
 import com.koto.sir.racoenpfib.SingleFragmentActivity;
 import com.koto.sir.racoenpfib.databases.Fetchr;
+import com.koto.sir.racoenpfib.databases.QueryData;
 
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
@@ -52,6 +57,7 @@ public class MobilityFragment extends AbstractPagerFragments {
     private static final String TAG = "MobilityFragment";
     private RecyclerView mRecyclerView;
     private SwipeRefreshLayout mSwipeRefreshLayout;
+    private LruCache<String, Bitmap> mLruCache = new LruCache<>(10);
 
     public static MobilityFragment newInstance() {
         return new MobilityFragment();
@@ -69,7 +75,8 @@ public class MobilityFragment extends AbstractPagerFragments {
 
         mRecyclerView = v.findViewById(R.id.rss_recyclerView);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        mRecyclerView.setAdapter(new RssAdapter(new ArrayList<DownloadRss.DataRSS>(0)));
+        List<DataRSS> list = QueryData.getDataRss();
+        mRecyclerView.setAdapter(new RssAdapter(list));
 
         mSwipeRefreshLayout = v.findViewById(R.id.swipe_refresh);
         Resources resources = getResources();
@@ -82,10 +89,18 @@ public class MobilityFragment extends AbstractPagerFragments {
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                new DownloadRss().execute();
+                if (isNetworkAvailable()) new DownloadRss().execute();
+                else mSwipeRefreshLayout.setRefreshing(false);
             }
         });
         return v;
+    }
+
+    private boolean isNetworkAvailable() {
+        ConnectivityManager connectivityManager
+                = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+        return activeNetworkInfo != null && activeNetworkInfo.isConnected();
     }
 
     private class RssHolder extends RecyclerView.ViewHolder implements Html.ImageGetter {
@@ -103,7 +118,7 @@ public class MobilityFragment extends AbstractPagerFragments {
             text.setMovementMethod(LinkMovementMethod.getInstance());
         }
 
-        public void bind(final DownloadRss.DataRSS data) {
+        public void bind(final DataRSS data) {
             title.setText(fromHtml(data.getTitle()));
             link.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -132,7 +147,9 @@ public class MobilityFragment extends AbstractPagerFragments {
         public Drawable getDrawable(String source) {
             LevelListDrawable d = new LevelListDrawable();
 
-            new LoadImage().execute(source, d);
+            if (isNetworkAvailable()) {
+                new LoadImage().execute(source, d);
+            }
 
             return new ColorDrawable(Color.TRANSPARENT);
         }
@@ -144,11 +161,16 @@ public class MobilityFragment extends AbstractPagerFragments {
             @Override
             protected Bitmap doInBackground(Object... params) {
                 String source = (String) params[0];
+                Bitmap bitmap = mLruCache.get(source);
+                if (bitmap != null) return bitmap;
+
                 mDrawable = (LevelListDrawable) params[1];
                 Log.d(TAG, "doInBackground " + source);
                 try {
                     InputStream is = new URL(source).openStream();
-                    return BitmapFactory.decodeStream(is);
+                    bitmap = BitmapFactory.decodeStream(is);
+                    mLruCache.put(source, bitmap);
+                    return bitmap;
                 } catch (FileNotFoundException e) {
                     e.printStackTrace();
                 } catch (MalformedURLException e) {
@@ -164,10 +186,6 @@ public class MobilityFragment extends AbstractPagerFragments {
                 Log.d(TAG, "onPostExecute drawable " + mDrawable);
                 Log.d(TAG, "onPostExecute bitmap " + bitmap);
                 if (bitmap != null) {
-                    BitmapDrawable d = new BitmapDrawable(getResources(), bitmap);
-                    mDrawable.addLevel(1, 1, d);
-                    mDrawable.setBounds(0, 0, bitmap.getWidth(), bitmap.getHeight());
-                    mDrawable.setLevel(1);
                     // i don't know yet a better way to refresh TextView
                     // mTv.invalidate() doesn't work as expected
 //                    CharSequence t = text.getText();
@@ -180,9 +198,9 @@ public class MobilityFragment extends AbstractPagerFragments {
     }
 
     private class RssAdapter extends RecyclerView.Adapter<RssHolder> {
-        private List<DownloadRss.DataRSS> mData;
+        private List<DataRSS> mData;
 
-        public RssAdapter(List<DownloadRss.DataRSS> data) {
+        public RssAdapter(List<DataRSS> data) {
             mData = data;
         }
 
@@ -204,7 +222,7 @@ public class MobilityFragment extends AbstractPagerFragments {
         }
     }
 
-    private class DownloadRss extends AsyncTask<Void, Void, List<DownloadRss.DataRSS>> {
+    private class DownloadRss extends AsyncTask<Void, Void, List<DataRSS>> {
         private static final String url = "https://www.fib.upc.edu/ca/mobilitat/rss.rss";
         private static final int IGNORE = 0;
         private static final int TITLE = 1;
@@ -278,6 +296,7 @@ public class MobilityFragment extends AbstractPagerFragments {
                 Log.e(TAG, "Parse error ", e);
             }
 
+            QueryData.setDataRss(ret);
             return ret;
         }
 
@@ -288,35 +307,37 @@ public class MobilityFragment extends AbstractPagerFragments {
             mRecyclerView.setAdapter(new RssAdapter(dataRSSES));
         }
 
-        private class DataRSS {
-            private String title;
-            private String link;
-            private String text;
+    }
 
-            public String getTitle() {
-                return title;
-            }
+    public class DataRSS {
+        private String title;
+        private String link;
+        private String text;
 
-            public void setTitle(String title) {
-                this.title = title;
-            }
+        public String getTitle() {
+            return title;
+        }
 
-            public String getLink() {
-                return link;
-            }
+        public void setTitle(String title) {
+            this.title = title;
+        }
 
-            public void setLink(String link) {
-                this.link = link;
-            }
+        public String getLink() {
+            return link;
+        }
 
-            public String getText() {
-                return text;
-            }
+        public void setLink(String link) {
+            this.link = link;
+        }
 
-            public void setText(String text) {
-                this.text = text;
-            }
+        public String getText() {
+            return text;
+        }
+
+        public void setText(String text) {
+            this.text = text;
         }
     }
+
 }
 

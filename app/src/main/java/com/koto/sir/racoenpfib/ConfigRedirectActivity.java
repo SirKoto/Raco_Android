@@ -22,6 +22,7 @@ import android.view.View;
 import com.koto.sir.racoenpfib.databases.PagerManager;
 import com.koto.sir.racoenpfib.pages.CalendarFragment;
 import com.koto.sir.racoenpfib.pages.ConfigFragment;
+import com.koto.sir.racoenpfib.pages.LayoutFragment;
 import com.koto.sir.racoenpfib.pages.MobilityFragment;
 
 public class ConfigRedirectActivity extends SingleFragmentActivity {
@@ -42,7 +43,6 @@ public class ConfigRedirectActivity extends SingleFragmentActivity {
         Fragment fragment = null;
         switch (mTag) {
             case PagerManager.CONFIG_PAGE:
-                //TODO
                 fragment = null;
                 break;
             case PagerManager.CALENDAR_PAGE:
@@ -52,7 +52,7 @@ public class ConfigRedirectActivity extends SingleFragmentActivity {
                 fragment = MobilityFragment.newInstance();
                 break;
             case PagerManager.LAYOUT_MENU:
-                fragment = null;
+                fragment = LayoutFragment.newInstance();
                 break;
             default:
         }
