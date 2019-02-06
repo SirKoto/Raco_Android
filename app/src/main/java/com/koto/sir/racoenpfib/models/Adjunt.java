@@ -1,12 +1,23 @@
 package com.koto.sir.racoenpfib.models;
 
+import java.io.Serializable;
 import java.util.Date;
 
-public class Adjunt {
+public class Adjunt implements Serializable {
     private String mimeType;
     private String nom;
     private String url;
     private Date last_modified;
+
+    @Override
+    public String toString() {
+        return "Adjunt{" +
+                "mimeType='" + mimeType + '\'' +
+                ", nom='" + nom + '\'' +
+                ", url='" + url + '\'' +
+                ", last_modified=" + last_modified +
+                '}';
+    }
 
     public String getMimeType() {
         return mimeType;

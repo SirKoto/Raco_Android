@@ -16,7 +16,7 @@ import java.util.UUID;
 
 public abstract class VisibleFragment extends Fragment {
     private static final String TAG = "VisibleFragment";
-    private UUID mUUID = new UUID(0, 0);
+    private static UUID mUUID = new UUID(0, 0);
 
     private BroadcastReceiver mOnShowNotification = new BroadcastReceiver() {
         @Override

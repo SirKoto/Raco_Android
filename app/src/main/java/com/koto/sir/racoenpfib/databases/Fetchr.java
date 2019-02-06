@@ -1,10 +1,12 @@
 package com.koto.sir.racoenpfib.databases;
 
+import android.app.Activity;
 import android.app.DownloadManager;
 import android.content.Context;
+import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Environment;
-import android.support.annotation.Nullable;
+
 import android.util.Log;
 
 import com.koto.sir.racoenpfib.models.Adjunt;
@@ -18,7 +20,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.util.Objects;
 
 public class Fetchr {
     private static final String TAG = "Fetchr";
@@ -130,8 +131,12 @@ public class Fetchr {
     }
 
     public void downloadFile(Context context, Adjunt adjunt) {
+
         //TODO CHECK SI HI HA INTERNET
+
+
         Uri url = Uri.parse(adjunt.getUrl());
+        Log.d(TAG, "DownloadFile " + adjunt.toString());
         DownloadManager.Request request = new DownloadManager.Request(url);
         request.setMimeType(adjunt.getMimeType());
 

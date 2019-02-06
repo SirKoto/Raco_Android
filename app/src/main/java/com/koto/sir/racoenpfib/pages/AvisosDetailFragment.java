@@ -2,24 +2,29 @@ package com.koto.sir.racoenpfib.pages;
 
 import android.app.DownloadManager;
 import android.content.Context;
+import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewCompat;
 import android.support.v7.widget.AppCompatTextView;
 import android.support.v7.widget.LinearLayoutCompat;
 import android.text.Html;
 import android.text.method.LinkMovementMethod;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import com.koto.sir.RacoEnpFibApp;
 import com.koto.sir.racoenpfib.R;
@@ -30,7 +35,9 @@ import com.koto.sir.racoenpfib.models.Avis;
 
 
 public class AvisosDetailFragment extends Fragment {
+    private static final String TAG = "AvisosDetailFragment";
     private static final String ARG_AVIS = "arg_avis";
+    private static final int REQUEST_STORAGE = 15232;
 
     private Avis mAvis;
     private OnFragmentDetaillneedsTransaction mCallback;
@@ -83,7 +90,7 @@ public class AvisosDetailFragment extends Fragment {
 
         v.findViewById(R.id.image_te_document).setVisibility(mAvis.getAdjunts().size() == 0 ? View.INVISIBLE : View.VISIBLE);
 
-        ((AppCompatTextView) v.findViewById(R.id.data_inserit)).setText(AvisosListFragment.sFormater.format(mAvis.getDataInsercio()));
+//        ((AppCompatTextView) v.findViewById(R.id.data_inserit)).setText(AvisosListFragment.sFormater.format(mAvis.getDataInsercio()));
         ((AppCompatTextView) v.findViewById(R.id.data_modificat)).setText(AvisosListFragment.sFormater.format(mAvis.getDataModificacio()));
 
 
@@ -111,6 +118,30 @@ public class AvisosDetailFragment extends Fragment {
                 textView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+                        Log.d(TAG, "clicked to download file");
+                        //Demanar permis!!
+                        int permissionCheck = ContextCompat.checkSelfPermission(getActivity(),
+                                android.Manifest.permission.WRITE_EXTERNAL_STORAGE);
+                        //TODO TESTEAR
+                        if (permissionCheck == PackageManager.PERMISSION_DENIED) {
+                            Log.d(TAG, "Permision denied");
+                            //demanar
+                            if (ActivityCompat.shouldShowRequestPermissionRationale(getActivity(),
+                                    android.Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+                                Toast.makeText(getActivity(), "To download your permission is needed", Toast.LENGTH_SHORT).show();
+                                Log.d(TAG, "Shouldshowrequestpermissionrationale");
+                                return;
+                            } else {
+                                Log.d(TAG, "RequestTalQual");
+
+                                requestPermissions(
+                                        new String[]{android.Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                                        REQUEST_STORAGE
+                                );
+                            }
+                            return;
+                        }
+                        Log.d(TAG, "Downloading on click");
                         new Fetchr().downloadFile(getActivity(), adjunt);
                     }
                 });
@@ -122,6 +153,14 @@ public class AvisosDetailFragment extends Fragment {
 
 
         return v;
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        if (requestCode == REQUEST_STORAGE && grantResults.length > 0
+                && grantResults[0] == PackageManager.PERMISSION_GRANTED)
+            Toast.makeText(getActivity(), "Press again to download", Toast.LENGTH_SHORT).show();
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
     }
 
     @Override

@@ -57,12 +57,11 @@
         <android.support.v7.widget.AppCompatTextView
             android:id="@+id/nom_assig"
             style="@style/TextAppearance.MaterialComponents.Subtitle1"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
             android:layout_toStartOf="@+id/images_linear_layout"
-            android:textAlignment="viewStart"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             tools:text="Notes provisionals examen final i pràctica obligatòria de Python" />
@@ -100,19 +99,19 @@
             android:gravity="end"
             android:orientation="horizontal">
 
-            <android.support.v7.widget.AppCompatTextView
+            <!--<android.support.v7.widget.AppCompatTextView
                 android:id="@+id/data_inserit"
                 style="@style/TextAppearance.MaterialComponents.Body2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                tools:text="10 Jun 2018" />
+                tools:text="10 Jun 2018" />-->
 
-            <android.support.v7.widget.AppCompatTextView
-                style="@style/TextAppearance.MaterialComponents.Caption"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="15dp"
-                android:text="@string/modification_text" />
+            <!-- <android.support.v7.widget.AppCompatTextView
+                 style="@style/TextAppearance.MaterialComponents.Caption"
+                 android:layout_width="wrap_content"
+                 android:layout_height="wrap_content"
+                 android:layout_marginStart="15dp"
+                 android:text="@string/modification_text" />-->
 
             <android.support.v7.widget.AppCompatTextView
                 android:id="@+id/data_modificat"
@@ -120,6 +119,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="5dp"
+                android:ellipsize="end"
+                android:maxLines="1"
                 tools:text="11 Jun 2018" />
         </android.support.v7.widget.LinearLayoutCompat>
     </RelativeLayout>

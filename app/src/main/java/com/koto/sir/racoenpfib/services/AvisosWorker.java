@@ -132,8 +132,6 @@ public class AvisosWorker extends Worker {
                 Log.d(TAG, "showBackgroundNotification " + avis.getTitol());
                 showBackgroundNotification(avis.getUid().hashCode(), notification, uuid);
             }
-
-
         } else
             sLock.unlock();
 

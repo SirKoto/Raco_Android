@@ -4,10 +4,10 @@ import android.util.Log;
 
 import com.koto.sir.racoenpfib.LoggerFragment;
 import com.koto.sir.racoenpfib.AbstractPagerFragments;
-import com.koto.sir.racoenpfib.pages.AvisosFragment;
 import com.koto.sir.racoenpfib.pages.AvisosManagerFragment;
 import com.koto.sir.racoenpfib.pages.CalendarFragment;
 import com.koto.sir.racoenpfib.pages.ConfigFragment;
+import com.koto.sir.racoenpfib.pages.MobilityFragment;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -77,7 +77,6 @@ public class PagerManager {
                 break;
             }*/
         mPagesIds.remove(page);
-        QueryData.setListPages(mPagesIds);
         mCallback.onPagesChanged();
     }
 
@@ -100,14 +99,17 @@ public class PagerManager {
         else
             mPagesIds.set(position, page);
 
-        QueryData.setListPages(mPagesIds);
         mCallback.onPagesChanged();
     }
 
-    public void addPage(int page) {
-        if (mPagesIds.size() > NUM_MAX_PAGES) return;
-        boolean found = false;
-        int pos = 0;
+    public boolean isActive(int page) {
+        return mPagesIds.contains(page);
+    }
+
+    public boolean addPage(int page) {
+        if (mPagesIds.size() > NUM_MAX_PAGES) return false;
+//        boolean found = false;
+        /*int pos = 0;
         while (pos < mPagesIds.size()) {
             if (mPagesIds.get(pos) == page) {
                 found = true;
@@ -116,11 +118,11 @@ public class PagerManager {
             pos++;
         }
         if (found)
-            mPagesIds.remove(pos);
+            mPagesIds.remove(pos);*/
         mPagesIds.add(page);
 
-        QueryData.setListPages(mPagesIds);
         mCallback.onPagesChanged();
+        return true;
     }
 
     public int getAvisPos() {
@@ -147,6 +149,9 @@ public class PagerManager {
         Log.d(TAG, "Boolean de token " + b);
         for (int i = 0; i < mPagesIds.size(); ++i) {
             switch (mPagesIds.get(i)) {
+                case RSS_MOVILITAT_PAGE:
+                    results.add(MobilityFragment.newInstance());
+                    break;
                 case CONFIG_PAGE:
                     results.add(ConfigFragment.newInstance());
                     break;
@@ -162,6 +167,10 @@ public class PagerManager {
         }
         Log.d(TAG, "Get Fragments " + results);
         return results;
+    }
+
+    public void commitChanges(){
+        QueryData.setListPages(mPagesIds);
     }
 
     public interface CallbackManager {

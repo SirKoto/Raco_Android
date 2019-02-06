@@ -235,8 +235,7 @@ public class MobilityFragment extends AbstractPagerFragments {
             try {
                 String data = new Fetchr().getUrlString(url);
                 // xml Parse
-//                Log.d(TAG, data);
-
+//                Log.d(TAG, data)
                 XmlPullParserFactory factory = XmlPullParserFactory.newInstance();
                 factory.setNamespaceAware(true);
                 XmlPullParser xpp = factory.newPullParser();
