@@ -239,7 +239,7 @@ public class AvisosLab {
                 null
         )) {
             cursor.moveToFirst();
-            if(!cursor.isAfterLast())
+            if (!cursor.isAfterLast())
                 avis = cursor.getAvis();
         }
         Log.d(TAG, "Avis trobat " + Objects.requireNonNull(avis).getUid());
@@ -283,5 +283,11 @@ public class AvisosLab {
         );
 
         return new AdjuntCursorWrapper(cursor);
+    }
+
+    public void deleteData() {
+        mDatabase.delete(AvisosTable.NAME, null, null);
+        mDatabase.delete(AdjuntsTable.NAME, null, null);
+        QueryData.setLastUpdatedAvis(0);
     }
 }

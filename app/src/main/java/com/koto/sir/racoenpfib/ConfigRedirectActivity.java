@@ -9,6 +9,7 @@ import android.os.Build;
 import android.os.PersistableBundle;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
+import android.support.v7.preference.PreferenceFragmentCompat;
 import android.support.v7.widget.Toolbar;
 import android.text.SpannableString;
 import android.text.style.ForegroundColorSpan;
@@ -24,6 +25,7 @@ import com.koto.sir.racoenpfib.pages.CalendarFragment;
 import com.koto.sir.racoenpfib.pages.ConfigFragment;
 import com.koto.sir.racoenpfib.pages.LayoutFragment;
 import com.koto.sir.racoenpfib.pages.MobilityFragment;
+import com.koto.sir.racoenpfib.pages.SettingsFragment;
 
 public class ConfigRedirectActivity extends SingleFragmentActivity {
     private static final String TAG = "ConfigRedirectActivity";
@@ -43,7 +45,7 @@ public class ConfigRedirectActivity extends SingleFragmentActivity {
         Fragment fragment = null;
         switch (mTag) {
             case PagerManager.CONFIG_PAGE:
-                fragment = null;
+                fragment = SettingsFragment.newInstance();
                 break;
             case PagerManager.CALENDAR_PAGE:
                 fragment = CalendarFragment.newInstance();

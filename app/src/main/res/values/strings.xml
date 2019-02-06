@@ -8,6 +8,10 @@
     <string name="day4">Thursday</string>
     <string name="day5">Friday</string>
     <string name="none">None</string>
+    <string name="avis">Avisos</string>
+    <string name="key_delete_avisos">KeyDeleteAvisos</string>
+    <string name="notifications_on">NotificacionsOn</string>
+    <string name="notificacions_on_title">Notifications enabled</string>
     <string name="modification_text">Modif:</string>
     <string name="files">Files</string>
     <string name="new_notification">New Avis</string>

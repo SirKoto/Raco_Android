@@ -10,6 +10,19 @@
 
         <item name="android:windowContentTransitions" tools:targetApi="lollipop">true</item>
 
+        <item name="preferenceTheme">
+            @style/PreferenceThemeOverlay.v14.Material
+        </item>
+
+    </style>
+
+    <style name="MyAlertDialogStyle" parent="Theme.MaterialComponents.Dialog.Alert">
+        <!-- Used for the buttons -->
+        <item name="colorAccent">@color/colorPrimaryVariant</item>
+        <!-- Used for the title and text -->
+        <item name="android:textColorPrimary">@color/colorOnPrimary</item>
+        <!-- Used for the background -->
+        <item name="android:background">@color/colorPrimary</item>
     </style>
 
     <style name="ToolbarColoredBackArrow" parent="AppTheme">
