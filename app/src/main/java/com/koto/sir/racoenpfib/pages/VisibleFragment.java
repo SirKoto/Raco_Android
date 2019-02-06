@@ -5,8 +5,12 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.util.Log;
+import android.view.View;
 import android.widget.Toast;
 
 import com.koto.sir.racoenpfib.R;
@@ -21,7 +25,7 @@ public abstract class VisibleFragment extends Fragment {
     private BroadcastReceiver mOnShowNotification = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            Log.i(TAG, "Canceling notification");
+//            Log.i(TAG, "Canceling notification");
             boolean b = false;
             if (getResultCode() == Activity.RESULT_OK) {
                 setResultCode(Activity.RESULT_CANCELED);
@@ -29,6 +33,7 @@ public abstract class VisibleFragment extends Fragment {
             }
             UUID uuid = (UUID) intent.getSerializableExtra(AvisosWorker.UNIQUE_IDENTIFIER);
             if (uuid != mUUID) {
+                Log.d(TAG, "callingOnNewDataFOund");
                 OnNewDataFound();
                 mUUID = uuid;
 
@@ -43,16 +48,19 @@ public abstract class VisibleFragment extends Fragment {
     protected abstract void OnNewDataFound();
 
     @Override
-    public void onStart() {
-        super.onStart();
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        Log.i(TAG, "onViewCreated, register " + (this instanceof AvisosFragment));
+        super.onViewCreated(view, savedInstanceState);
         IntentFilter filter = new IntentFilter(AvisosWorker.ACTION_SHOW_NOTIFICATION);
         getActivity().registerReceiver(mOnShowNotification, filter,
                 AvisosWorker.PERM_PRIVATE, null);
     }
 
     @Override
-    public void onStop() {
-        super.onStop();
+    public void onDestroyView() {
+        Log.i(TAG, "onDestroyView, unregister " + (this instanceof AvisosFragment));
+        super.onDestroyView();
         getActivity().unregisterReceiver(mOnShowNotification);
+
     }
 }

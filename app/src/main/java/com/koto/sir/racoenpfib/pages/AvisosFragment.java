@@ -59,7 +59,7 @@ public class AvisosFragment extends VisibleFragment {
         mRecyclerView = v.findViewById(R.id.avisos_recycler_view);
         mRecyclerView.setLayoutManager(new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL));
         mAssigs = AvisosLab.get(getActivity()).getNomAssigsAvisos();
-        mRecyclerView.setAdapter(new AvisosAdapter(mAssigs));
+        mRecyclerView.setAdapter(new AvisosAdapter());
 
 
         mSwipeRefreshLayout = v.findViewById(R.id.swipe_refresh_avis);
@@ -120,8 +120,8 @@ public class AvisosFragment extends VisibleFragment {
 
     @Override
     protected void OnNewDataFound() {
-        List<String> assigs = AvisosLab.get(getActivity()).getNomAssigsAvisos();
-        mRecyclerView.setAdapter(new AvisosAdapter(assigs));
+        mAssigs = AvisosLab.get(getActivity()).getNomAssigsAvisos();
+        mRecyclerView.getAdapter().notifyDataSetChanged();
     }
 
     public interface OnFragmentGeneralNeedTransaction {
@@ -204,11 +204,6 @@ public class AvisosFragment extends VisibleFragment {
     }
 
     private class AvisosAdapter extends RecyclerView.Adapter<AvisosHolder> {
-        List<String> mAssigs;
-
-        AvisosAdapter(List<String> assigs) {
-            mAssigs = assigs;
-        }
 
 
         @NonNull
