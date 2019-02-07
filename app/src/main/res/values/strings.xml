@@ -10,6 +10,8 @@
     <string name="none">None</string>
     <string name="avis">Avisos</string>
     <string name="key_delete_avisos">KeyDeleteAvisos</string>
+    <string name="key_delete_token">KeyDeleteToken</string>
+    <string name="token">Token</string>
     <string name="notifications_on">NotificacionsOn</string>
     <string name="notificacions_on_title">Notifications enabled</string>
     <string name="modification_text">Modif:</string>

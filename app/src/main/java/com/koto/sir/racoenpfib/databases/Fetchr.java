@@ -43,7 +43,7 @@ public class Fetchr {
                 if (connection.getResponseCode() == HttpURLConnection.HTTP_UNAUTHORIZED) {
                     //TODO EL TOKEN HA ESTAT ESBORRAT. WHAT TO DO?????????????????????
                 }
-                throw new IOException(connection.getResponseMessage() + ": with " + urlSpec);
+                throw new IOException(connection.getResponseMessage() + ": with " + urlSpec + " what " + connection.getResponseCode());
             }
             int bytesRead = 0;
             byte[] buffer = new byte[1024];

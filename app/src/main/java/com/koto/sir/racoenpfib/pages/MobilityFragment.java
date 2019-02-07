@@ -77,6 +77,9 @@ public class MobilityFragment extends AbstractPagerFragments {
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         List<DataRSS> list = QueryData.getDataRss();
         mRecyclerView.setAdapter(new RssAdapter(list));
+        if(list.size() == 0){
+            if (isNetworkAvailable()) new DownloadRss().execute();
+        }
 
         mSwipeRefreshLayout = v.findViewById(R.id.swipe_refresh);
         Resources resources = getResources();

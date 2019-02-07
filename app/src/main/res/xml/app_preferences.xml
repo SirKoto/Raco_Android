@@ -8,10 +8,15 @@
             android:key="@string/key_delete_avisos"
             android:title="Esborrar historial" />
         <android.support.v7.preference.SwitchPreferenceCompat
-            android:key="@string/notifications_on"
-            android:title="@string/notificacions_on_title"
             android:defaultValue="true"
-            />
+            android:key="@string/notifications_on"
+            android:title="@string/notificacions_on_title" />
+    </android.support.v7.preference.PreferenceCategory>
+
+    <android.support.v7.preference.PreferenceCategory android:title="@string/token">
+        <Preference
+            android:key="@string/key_delete_token"
+            android:title="Esborrar token" />
     </android.support.v7.preference.PreferenceCategory>
 
 </android.support.v7.preference.PreferenceScreen>

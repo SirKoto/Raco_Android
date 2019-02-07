@@ -20,28 +20,37 @@ import java.util.UUID;
 
 public abstract class VisibleFragment extends Fragment {
     private static final String TAG = "VisibleFragment";
+    public static final String ACTION_JUST_RELOAD = "com.koto.sir.JUST_RELOAD";
     private static UUID mUUID = new UUID(0, 0);
-
+    private boolean isActive = false;
     private BroadcastReceiver mOnShowNotification = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
 //            Log.i(TAG, "Canceling notification");
             boolean b = false;
             if (getResultCode() == Activity.RESULT_OK) {
-                setResultCode(Activity.RESULT_CANCELED);
+                //setResultCode(Activity.RESULT_CANCELED);
                 b = true;
             }
             UUID uuid = (UUID) intent.getSerializableExtra(AvisosWorker.UNIQUE_IDENTIFIER);
-            if (uuid != mUUID) {
-                Log.d(TAG, "callingOnNewDataFOund");
+            Log.d(TAG, mUUID.toString() + " VS " + uuid.toString());
+            if (!uuid.equals(mUUID)) {
+//                Log.d(TAG, "callingOnNewDataFOund");
                 OnNewDataFound();
                 mUUID = uuid;
-
-                if (b) {
+                Log.d(TAG, "b: " + b + " isActive: " + isActive);
+                if (b && isActive) {
                     //TODO canviar el toast per una barra inferior, o alguna cosa més descriptiva
                     Toast.makeText(context, R.string.new_notification, Toast.LENGTH_LONG).show();
                 }
             }
+        }
+    };
+
+    private BroadcastReceiver mOnJustReloadBroadcast = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            OnNewDataFound();
         }
     };
 
@@ -54,6 +63,22 @@ public abstract class VisibleFragment extends Fragment {
         IntentFilter filter = new IntentFilter(AvisosWorker.ACTION_SHOW_NOTIFICATION);
         getActivity().registerReceiver(mOnShowNotification, filter,
                 AvisosWorker.PERM_PRIVATE, null);
+
+        IntentFilter filter2 = new IntentFilter(ACTION_JUST_RELOAD);
+        getActivity().registerReceiver(mOnJustReloadBroadcast, filter2,
+                AvisosWorker.PERM_PRIVATE, null);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        isActive = false;
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        isActive = true;
     }
 
     @Override
@@ -61,6 +86,7 @@ public abstract class VisibleFragment extends Fragment {
         Log.i(TAG, "onDestroyView, unregister " + (this instanceof AvisosFragment));
         super.onDestroyView();
         getActivity().unregisterReceiver(mOnShowNotification);
+        getActivity().unregisterReceiver(mOnJustReloadBroadcast);
 
     }
 }
