@@ -15,7 +15,7 @@
         app:popupTheme="@style/AppTheme"
         app:theme="@style/ToolbarColoredBackArrow" />
 
-    <FrameLayout
+    <android.support.design.widget.CoordinatorLayout
         andoid:id="@+id/fragment_container"
         andoid:layout_width="match_parent"
         andoid:layout_height="match_parent" />

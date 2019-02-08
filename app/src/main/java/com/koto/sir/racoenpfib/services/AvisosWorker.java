@@ -77,6 +77,10 @@ public class AvisosWorker extends Worker {
         sLock.lock();
         String dataJson = new Fetchr().getDataUrlJson(URL);
         Log.d(TAG, "dataJson: " + dataJson);
+        if (dataJson.equals("")) {
+            sLock.unlock();
+            return Result.failure();
+        }
         final long last = QueryData.getLastUpdatedAvis();
         long newer = last;
         List<Avis> renovats = new ArrayList<>();
@@ -98,6 +102,7 @@ public class AvisosWorker extends Worker {
         } catch (JSONException e) {
             Log.e(TAG, "Error en la creacio d'avisos", e);
             //Desem que es provable que hi hagui error ja que no hi ha login
+            sLock.unlock();
             return Result.failure();
         }
         //Guardar tots els nous avisos modificats

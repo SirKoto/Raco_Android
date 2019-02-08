@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.card.MaterialCardView;
+import android.support.design.widget.Snackbar;
 import android.support.v7.widget.AppCompatTextView;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
@@ -33,6 +34,7 @@ public class CalendarFragment extends AbstractPagerFragments {
     private static final String TAG = "CalendarFragment";
     private RecyclerView mRecyclerView;
     private List<CalendarClasses> mClasses;
+    private View mView;
 
     public static CalendarFragment newInstance() {
 
@@ -42,18 +44,18 @@ public class CalendarFragment extends AbstractPagerFragments {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.calendar_fragment, container, false);
+        mView = inflater.inflate(R.layout.calendar_fragment, container, false);
 
         mClasses = QueryData.getCalendar();
-        if(mClasses == null)
+        if (mClasses == null)
             mClasses = new ArrayList<>(0);
 
 
-        mRecyclerView = v.findViewById(R.id.calendar_recycler_view);
+        mRecyclerView = mView.findViewById(R.id.calendar_recycler_view);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));//GridLayoutManager(getActivity(), 5));
         setupAdapter();
 
-        return v;
+        return mView;
     }
 
     private void setupAdapter() {
@@ -72,11 +74,12 @@ public class CalendarFragment extends AbstractPagerFragments {
     @Override
     public void onStart() {
         super.onStart();
-        if (mClasses == null || mClasses.isEmpty()) {
-            mClasses = new ArrayList<>(0);
-            new FetchCalendar().execute();
-            Log.d(TAG, "mclasses is null");
-        }
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        new FetchCalendar().execute();
     }
 
     private class TimetableHolder extends RecyclerView.ViewHolder {
@@ -215,11 +218,29 @@ public class CalendarFragment extends AbstractPagerFragments {
         }
 
         @Override
-        protected void onPostExecute(List<CalendarClasses> calendarClasses) {
+        protected void onPostExecute(final List<CalendarClasses> calendarClasses) {
             Log.d(TAG, "classes fetched " + calendarClasses);
-            mClasses = calendarClasses;
-            QueryData.setCalendar(mClasses);
-            setupAdapter();
+            if (calendarClasses.size() != 0) {
+                if (mClasses.size() == 0) {
+                    mClasses = calendarClasses;
+                    QueryData.setCalendar(mClasses);
+                    setupAdapter();
+                }
+                if (!mClasses.equals(calendarClasses)) {
+                    Snackbar
+                            .make(mView, "Different timetable found", Snackbar.LENGTH_INDEFINITE)
+                            .setAction("Load", new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    mClasses = calendarClasses;
+                                    QueryData.setCalendar(mClasses);
+                                    setupAdapter();
+                                }
+                            })
+                            .show();
+                }
+
+            }
         }
     }
 }

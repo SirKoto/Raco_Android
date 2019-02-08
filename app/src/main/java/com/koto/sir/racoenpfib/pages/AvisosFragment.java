@@ -83,12 +83,14 @@ public class AvisosFragment extends VisibleFragment {
 
     private void tryDownloadingAgain() {
 //        getActivity().startService(AvisosService.newIntent(getActivity()));
-        OneTimeWorkRequest reload = new OneTimeWorkRequest.Builder(AvisosWorker.class).build();
+        Log.d(TAG, "on tryDownloadingAgain");
+        final OneTimeWorkRequest reload = new OneTimeWorkRequest.Builder(AvisosWorker.class).build();
         WorkManager.getInstance().enqueue(reload);
         WorkManager.getInstance().getWorkInfoByIdLiveData(reload.getId())
-                .observe(getViewLifecycleOwner(), new Observer<WorkInfo>() {
+                .observe(getActivity(), new Observer<WorkInfo>() {
                     @Override
                     public void onChanged(@Nullable WorkInfo workInfo) {
+                        Log.d(TAG, "on WorkInfo changed " + (workInfo == null ? "null" : workInfo.toString()));
                         if (workInfo != null && workInfo.getState().isFinished()) {
                             mSwipeRefreshLayout.setRefreshing(false);
                         }
@@ -98,9 +100,11 @@ public class AvisosFragment extends VisibleFragment {
         /*new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                mSwipeRefreshLayout.setRefreshing(false);
+                Log.d(TAG, "running " + WorkManager.getInstance().getWorkInfoById(reload.getId()).toString());
+                if (WorkManager.getInstance().getWorkInfoById(reload.getId()).isDone())
+                    mSwipeRefreshLayout.setRefreshing(false);
             }
-        }, 200);*/
+        }, 10000);*/
     }
 
     @Override

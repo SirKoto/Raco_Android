@@ -1,5 +1,7 @@
 package com.koto.sir.racoenpfib.models;
 
+import java.util.Objects;
+
 public class CalendarClasses {
     private int dia;
     private int durada;
@@ -8,6 +10,20 @@ public class CalendarClasses {
     private String tipus;
     private String aules;
     private int inici;
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        CalendarClasses classes = (CalendarClasses) o;
+        return dia == classes.dia &&
+                durada == classes.durada &&
+                inici == classes.inici &&
+                Objects.equals(codiAssig, classes.codiAssig) &&
+                Objects.equals(grup, classes.grup) &&
+                Objects.equals(tipus, classes.tipus) &&
+                Objects.equals(aules, classes.aules);
+    }
 
     public int getDia() {
         return dia;
@@ -62,6 +78,6 @@ public class CalendarClasses {
     }
 
     public void setInici(String inici) {
-    this.inici = Integer.valueOf(inici.substring(0,2));
+        this.inici = Integer.valueOf(inici.substring(0, 2));
     }
 }
