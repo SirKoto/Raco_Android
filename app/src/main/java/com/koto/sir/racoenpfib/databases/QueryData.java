@@ -2,13 +2,16 @@ package com.koto.sir.racoenpfib.databases;
 
 import android.content.Context;
 import android.preference.PreferenceManager;
+import android.support.annotation.NonNull;
 import android.util.Log;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.koto.sir.RacoEnpFibApp;
 import com.koto.sir.racoenpfib.models.CalendarClasses;
+import com.koto.sir.racoenpfib.pages.MobilityFragment;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class QueryData {
@@ -17,6 +20,7 @@ public class QueryData {
     private static final String PREF_LIST_PAGES = "list_pages";
     private static final String PREF_CALENDAR = "calendar_classes";
     private static final String LAST_UPDATED_AVIS = "last_updated_avis";
+    private static final String MOBILITY_RSS = "mob_rss";
     private static final String ALARM_AVISOS_ON = "alarma_avisos_on";
 
     public static boolean getAlarmaAvisos() {
@@ -38,6 +42,27 @@ public class QueryData {
     public static void setLastUpdatedAvis(long data) {
         PreferenceManager.getDefaultSharedPreferences(RacoEnpFibApp.getAppContext())
                 .edit().putLong(LAST_UPDATED_AVIS, data)
+                .apply();
+    }
+
+    @NonNull
+    public static List<MobilityFragment.DataRSS> getDataRss() {
+        String jsonData = PreferenceManager.getDefaultSharedPreferences(RacoEnpFibApp.getAppContext())
+                .getString(MOBILITY_RSS, null);
+        if (jsonData == null)
+            return new ArrayList<MobilityFragment.DataRSS>(0);
+        Gson gson = new Gson();
+        List<MobilityFragment.DataRSS> data = gson.fromJson(jsonData, new TypeToken<List<MobilityFragment.DataRSS>>() {
+        }.getType());
+        return data == null ? new ArrayList<MobilityFragment.DataRSS>(0) : data;
+    }
+
+    public static void setDataRss(List<MobilityFragment.DataRSS> dataRss) {
+        Gson gson = new Gson();
+        String data = gson.toJson(dataRss, new TypeToken<List<MobilityFragment.DataRSS>>() {
+        }.getType());
+        PreferenceManager.getDefaultSharedPreferences(RacoEnpFibApp.getAppContext())
+                .edit().putString(MOBILITY_RSS, data)
                 .apply();
     }
 

@@ -105,7 +105,7 @@ public class AvisosManagerFragment extends AbstractPagerFragments
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             fragment.setSharedElementEnterTransition(TransitionInflater.from(getActivity()).inflateTransition(android.R.transition.move));
-            fragment.setSharedElementReturnTransition(TransitionInflater.from(getActivity()).inflateTransition(android.R.transition.move).setStartDelay(100));
+            fragment.setSharedElementReturnTransition(TransitionInflater.from(getActivity()).inflateTransition(android.R.transition.move).setStartDelay(200));
         }
 //        fragment.setSharedElementReturnTransition(new ChangeBounds());
 
@@ -168,11 +168,25 @@ public class AvisosManagerFragment extends AbstractPagerFragments
     @Override
     public void onBackPressedFromDetail(Avis avis) {
         Log.d(TAG, "BackFromDetail " + (mState == DETAIL_VIEW));
-        mSizeStack--;
-        getChildFragmentManager().popBackStack();
+        if (mState == DETAIL_VIEW) {
+            Fragment fragment = AvisosFragment.newInstance();
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                fragment.setEnterTransition(new Slide(Gravity.BOTTOM).setDuration(300).setStartDelay(300));
+            }
+            getChildFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment)
+                    .commit();
+            mState = GENERAL_VIEW;
+        } else {
+            mSizeStack--;
+            getChildFragmentManager().popBackStack();
+        }
     }
 
     public boolean onBackPressed() {
+        if (mState == DETAIL_VIEW) {
+            onBackPressedFromDetail(null);
+            return true;
+        }
         if (mSizeStack == 0) return false;
         getChildFragmentManager().popBackStack();
         mSizeStack--;

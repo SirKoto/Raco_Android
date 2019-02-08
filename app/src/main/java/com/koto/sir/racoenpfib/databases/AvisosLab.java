@@ -61,7 +61,7 @@ public class AvisosLab {
 
         values.put(AdjuntsTable.Cols.NAME, adjunt.getNom());
         values.put(AdjuntsTable.Cols.MIME, adjunt.getMimeType());
-        values.put(AdjuntsTable.Cols.URL, adjunt.getMimeType());
+        values.put(AdjuntsTable.Cols.URL, adjunt.getUrl());
         values.put(AdjuntsTable.Cols.DATA_MODIFICACIO, adjunt.getLast_modified().getTime());
 
         values.put(AdjuntsTable.Cols.UUID_FOREIGN, uuid.toString());
@@ -84,7 +84,7 @@ public class AvisosLab {
     public static void parseAvis(Avis avis, JSONObject object) throws JSONException {
         String titol = object.getString("titol");
         String assig = object.getString("codi_assig");
-        String text = object.getString("text");
+        String text = object.getString("text").trim();
         Date date_i = stringToDate(object.getString("data_insercio"));
         Date date_m = stringToDate(object.getString("data_modificacio"));
         Date date_c = stringToDate(object.getString("data_caducitat"));
@@ -239,7 +239,7 @@ public class AvisosLab {
                 null
         )) {
             cursor.moveToFirst();
-            if(!cursor.isAfterLast())
+            if (!cursor.isAfterLast())
                 avis = cursor.getAvis();
         }
         Log.d(TAG, "Avis trobat " + Objects.requireNonNull(avis).getUid());
@@ -283,5 +283,11 @@ public class AvisosLab {
         );
 
         return new AdjuntCursorWrapper(cursor);
+    }
+
+    public void deleteData() {
+        mDatabase.delete(AvisosTable.NAME, null, null);
+        mDatabase.delete(AdjuntsTable.NAME, null, null);
+        QueryData.setLastUpdatedAvis(0);
     }
 }

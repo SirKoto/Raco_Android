@@ -5,9 +5,9 @@
     android:id="@+id/avis_card"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:transitionGroup="true"
-    android:elevation="5dp"
     android:layout_margin="5dp"
+    android:elevation="5dp"
+    android:transitionGroup="true"
     app:cardBackgroundColor="@color/colorPrimary"
     app:cardCornerRadius="5dp">
 
@@ -18,18 +18,19 @@
 
         <android.support.v7.widget.LinearLayoutCompat
             android:layout_width="match_parent"
-            android:layout_marginStart="10dp"
             android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
             android:orientation="vertical">
 
             <android.support.v7.widget.AppCompatTextView
                 android:id="@+id/title_card_avis"
                 style="@style/TextAppearance.MaterialComponents.Headline3"
-                android:layout_width="wrap_content"
-                android:background="@color/colorPrimary"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingRight="12dp"
-                android:layout_alignParentStart="true"
+                android:layout_alignParentEnd="true"
+                android:background="@color/colorPrimary"
+                android:paddingStart="12dp"
+                android:paddingEnd="12dp"
                 android:textColor="@color/colorOnPrimary"
                 tools:text="LP" />
 

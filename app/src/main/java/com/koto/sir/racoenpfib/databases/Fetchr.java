@@ -1,13 +1,18 @@
 package com.koto.sir.racoenpfib.databases;
 
+import android.app.Activity;
 import android.app.DownloadManager;
 import android.content.Context;
+import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Environment;
-import android.support.annotation.Nullable;
+
 import android.util.Log;
 
+import com.koto.sir.RacoEnpFibApp;
 import com.koto.sir.racoenpfib.models.Adjunt;
+import com.koto.sir.racoenpfib.services.AvisosWorker;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -18,16 +23,17 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.util.Objects;
 
 public class Fetchr {
     private static final String TAG = "Fetchr";
+    public static final String ACTION_TOKEN_UNAUTHORIZED = "com.koto.sir.TOKEN_UNAUTHORIZED";
 
     public byte[] getUrlBytes(String urlSpec) throws IOException {
         return getUrlBytes(urlSpec, null, null);
     }
 
     public byte[] getUrlBytes(String urlSpec, String token, String mime_type) throws IOException {
+        Log.d(TAG, "in getUrlBytes " + urlSpec);
         URL url = new URL(urlSpec);
         HttpURLConnection connection = (HttpURLConnection) url.openConnection();
         if (token != null) {
@@ -37,12 +43,8 @@ public class Fetchr {
         try (InputStream in = connection.getInputStream();
              ByteArrayOutputStream out = new ByteArrayOutputStream()) {
 
-
             if (connection.getResponseCode() != HttpURLConnection.HTTP_OK) {
-                if (connection.getResponseCode() == HttpURLConnection.HTTP_UNAUTHORIZED) {
-                    //TODO EL TOKEN HA ESTAT ESBORRAT. WHAT TO DO?????????????????????
-                }
-                throw new IOException(connection.getResponseMessage() + ": with " + urlSpec);
+                throw new IOException(connection.getResponseMessage() + ": with " + urlSpec + " what " + connection.getResponseCode());
             }
             int bytesRead = 0;
             byte[] buffer = new byte[1024];
@@ -51,6 +53,11 @@ public class Fetchr {
             }
             return out.toByteArray();
         } finally {
+            Log.d(TAG, "getUrlBytes " + connection.getResponseMessage() + " " + connection.getResponseCode());
+            if (connection.getResponseCode() == HttpURLConnection.HTTP_UNAUTHORIZED) {
+                Intent intent = new Intent(ACTION_TOKEN_UNAUTHORIZED);
+                RacoEnpFibApp.getAppContext().sendBroadcast(intent, AvisosWorker.PERM_PRIVATE);
+            }
             connection.disconnect();
         }
     }
@@ -118,7 +125,7 @@ public class Fetchr {
     public String getDataUrlJson(String url) {
         try {
             AuthState authState = QueryData.getAuthState();
-            Log.d(TAG, "getdataurl autstate==null" + (authState == null));
+            Log.d(TAG, "getdataurl autstate==null " + (authState == null));
             if (authState == null) return "";
             String token = authState.getToken();
             if (token.equals("")) throw new IOException("Empty Token");
@@ -130,8 +137,12 @@ public class Fetchr {
     }
 
     public void downloadFile(Context context, Adjunt adjunt) {
+
         //TODO CHECK SI HI HA INTERNET
+
+
         Uri url = Uri.parse(adjunt.getUrl());
+        Log.d(TAG, "DownloadFile " + adjunt.toString());
         DownloadManager.Request request = new DownloadManager.Request(url);
         request.setMimeType(adjunt.getMimeType());
 

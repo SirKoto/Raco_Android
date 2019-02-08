@@ -8,7 +8,21 @@
     <string name="day4">Thursday</string>
     <string name="day5">Friday</string>
     <string name="none">None</string>
+    <string name="avis">Avisos</string>
+    <string name="key_delete_avisos">KeyDeleteAvisos</string>
+    <string name="key_delete_token">KeyDeleteToken</string>
+    <string name="token">Token</string>
+    <string name="notifications_on">NotificacionsOn</string>
+    <string name="notificacions_on_title">Notifications enabled</string>
     <string name="modification_text">Modif:</string>
     <string name="files">Files</string>
     <string name="new_notification">New Avis</string>
+    <string name="configuration">Configuration</string>
+    <string name="configure_info">Configure the application at your taste</string>
+    <string name="dashboard">Dashboard</string>
+    <string name="dashboard_info">Reorganize, delete or add pages to the dashboard</string>
+    <string name="calendar">Timetable</string>
+    <string name="calendar_info">Review your weekly schedule</string>
+    <string name="rss">RSS Mobility</string>
+    <string name="rss_info">Consult the latest news of mobility programs available to you</string>
 </resources>

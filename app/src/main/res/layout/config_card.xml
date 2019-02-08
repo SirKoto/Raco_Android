@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/config_card"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="10dp"
+    >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
+        android:gravity="top|center"
+        android:orientation="vertical">
+
+        <android.support.v7.widget.AppCompatImageView
+            android:id="@+id/image_config"
+            android:layout_width="64dp"
+            android:layout_height="64dp"
+            android:background="@drawable/cercle_background_1"
+            android:padding="12.5dp"
+            tools:srcCompat="@drawable/ic_baseline_calendar_today_24px" />
+
+        <android.support.v7.widget.AppCompatTextView
+            android:id="@+id/title_config"
+            style="@style/TextAppearance.MaterialComponents.Body1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            tools:text="@string/dashboard" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_margin="10dp"
+            android:background="@android:color/holo_blue_dark" />
+
+        <android.support.v7.widget.AppCompatTextView
+            android:id="@+id/config_info"
+            style="@style/TextAppearance.MaterialComponents.Body2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:alpha="0.67"
+            android:gravity="center"
+            android:padding="5dp"
+            tools:text="@string/dashboard_info" />
+    </LinearLayout>
+
+</android.support.design.card.MaterialCardView>

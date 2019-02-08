@@ -73,7 +73,7 @@ public class AvisosWorker extends Worker {
     @NonNull
     @Override
     public Result doWork() {
-        if (!isNetworkAvailableAndConnected()) return Result.retry();
+        if (!isNetworkAvailableAndConnected()) return Result.failure();
         sLock.lock();
         String dataJson = new Fetchr().getDataUrlJson(URL);
         Log.d(TAG, "dataJson: " + dataJson);
@@ -98,7 +98,7 @@ public class AvisosWorker extends Worker {
         } catch (JSONException e) {
             Log.e(TAG, "Error en la creacio d'avisos", e);
             //Desem que es provable que hi hagui error ja que no hi ha login
-            return Result.retry();
+            return Result.failure();
         }
         //Guardar tots els nous avisos modificats
         Log.d(TAG, "avisos renovats: " + renovats.toString());
@@ -132,8 +132,6 @@ public class AvisosWorker extends Worker {
                 Log.d(TAG, "showBackgroundNotification " + avis.getTitol());
                 showBackgroundNotification(avis.getUid().hashCode(), notification, uuid);
             }
-
-
         } else
             sLock.unlock();
 

@@ -37,7 +37,7 @@ import androidx.work.WorkInfo;
 import androidx.work.WorkManager;
 
 public class AvisosListFragment extends VisibleFragment {
-    public static final DateFormat sFormater = DateFormat.getDateInstance(DateFormat.MEDIUM);
+    public static final DateFormat sFormater = DateFormat.getDateTimeInstance();
     private static final String TAG = "AvisosListFragment";
     private static final String ARG_NAME_ASSIG = "com.koto.sir.AvisosListFragment.NomAssig";
     private String nomAssig;
@@ -185,7 +185,7 @@ public class AvisosListFragment extends VisibleFragment {
 
     private class AvisItemHolder extends RecyclerView.ViewHolder {
         private AppCompatTextView mTitle;
-        private AppCompatTextView mDate_i;
+        //        private AppCompatTextView mDate_i;
         private AppCompatTextView mDate_m;
         private AppCompatImageView mNewAvis;
         private AppCompatImageView mHasDocument;
@@ -193,7 +193,7 @@ public class AvisosListFragment extends VisibleFragment {
         public AvisItemHolder(@NonNull View itemView) {
             super(itemView);
             mTitle = itemView.findViewById(R.id.nom_assig);
-            mDate_i = itemView.findViewById(R.id.data_inserit);
+//            mDate_i = itemView.findViewById(R.id.data_inserit);
             mDate_m = itemView.findViewById(R.id.data_modificat);
             mNewAvis = itemView.findViewById(R.id.image_no_vist);
             mHasDocument = itemView.findViewById(R.id.image_te_document);
@@ -201,7 +201,7 @@ public class AvisosListFragment extends VisibleFragment {
 
         public void bind(final Avis avis) {
             mTitle.setText(avis.getTitol());
-            mDate_i.setText(sFormater.format(avis.getDataInsercio()));
+//            mDate_i.setText(sFormater.format(avis.getDataInsercio()));
             mDate_m.setText(sFormater.format(avis.getDataModificacio()));
             mNewAvis.setVisibility(avis.isVist() ? View.INVISIBLE : View.VISIBLE);
             mHasDocument.setVisibility(avis.getAdjunts().size() == 0 ? View.INVISIBLE : View.VISIBLE);
@@ -209,7 +209,7 @@ public class AvisosListFragment extends VisibleFragment {
                 @Override
                 public void onClick(View v) {
                     setExitTransition(new Fade(Fade.OUT).setDuration(150));
-//                    setReenterTransition(new Fade(Fade.IN).setStartDelay(300).setDuration(500));
+                    setReenterTransition(new Fade(Fade.IN).setStartDelay(300).setDuration(500));
                     mCallback.transactionToDetail(avis, itemView, getView().findViewById(R.id.card_relative_layour));
                 }
             });

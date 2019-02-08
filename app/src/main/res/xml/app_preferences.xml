@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.preference.PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <android.support.v7.preference.PreferenceCategory android:title="@string/avis">
+        <Preference
+            android:key="@string/key_delete_avisos"
+            android:title="Esborrar historial" />
+        <android.support.v7.preference.SwitchPreferenceCompat
+            android:defaultValue="true"
+            android:key="@string/notifications_on"
+            android:title="@string/notificacions_on_title" />
+    </android.support.v7.preference.PreferenceCategory>
+
+    <android.support.v7.preference.PreferenceCategory android:title="@string/token">
+        <Preference
+            android:key="@string/key_delete_token"
+            android:title="Esborrar token" />
+    </android.support.v7.preference.PreferenceCategory>
+
+</android.support.v7.preference.PreferenceScreen>
