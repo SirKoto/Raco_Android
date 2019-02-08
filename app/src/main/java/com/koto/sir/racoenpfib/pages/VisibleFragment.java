@@ -29,7 +29,7 @@ public abstract class VisibleFragment extends Fragment {
 //            Log.i(TAG, "Canceling notification");
             boolean b = false;
             if (getResultCode() == Activity.RESULT_OK) {
-                //setResultCode(Activity.RESULT_CANCELED);
+                setResultCode(Activity.RESULT_CANCELED);
                 b = true;
             }
             UUID uuid = (UUID) intent.getSerializableExtra(AvisosWorker.UNIQUE_IDENTIFIER);
