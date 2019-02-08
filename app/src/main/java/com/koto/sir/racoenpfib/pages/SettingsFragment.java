@@ -89,7 +89,7 @@ public class SettingsFragment extends PreferenceFragmentCompat {
         return super.onPreferenceTreeClick(preference);
     }
 
-    private static class DeleteToken extends AsyncTask<AuthState, Void, Void> {
+    public static class DeleteToken extends AsyncTask<AuthState, Void, Void> {
         @Override
         protected Void doInBackground(AuthState... authStates) {
             authStates[0].deleteToken();

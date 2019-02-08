@@ -3,13 +3,16 @@ package com.koto.sir.racoenpfib.databases;
 import android.app.Activity;
 import android.app.DownloadManager;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Environment;
 
 import android.util.Log;
 
+import com.koto.sir.RacoEnpFibApp;
 import com.koto.sir.racoenpfib.models.Adjunt;
+import com.koto.sir.racoenpfib.services.AvisosWorker;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -23,12 +26,14 @@ import java.net.URL;
 
 public class Fetchr {
     private static final String TAG = "Fetchr";
+    public static final String ACTION_TOKEN_UNAUTHORIZED = "com.koto.sir.TOKEN_UNAUTHORIZED";
 
     public byte[] getUrlBytes(String urlSpec) throws IOException {
         return getUrlBytes(urlSpec, null, null);
     }
 
     public byte[] getUrlBytes(String urlSpec, String token, String mime_type) throws IOException {
+        Log.d(TAG, "in getUrlBytes " + urlSpec);
         URL url = new URL(urlSpec);
         HttpURLConnection connection = (HttpURLConnection) url.openConnection();
         if (token != null) {
@@ -38,11 +43,7 @@ public class Fetchr {
         try (InputStream in = connection.getInputStream();
              ByteArrayOutputStream out = new ByteArrayOutputStream()) {
 
-
             if (connection.getResponseCode() != HttpURLConnection.HTTP_OK) {
-                if (connection.getResponseCode() == HttpURLConnection.HTTP_UNAUTHORIZED) {
-                    //TODO EL TOKEN HA ESTAT ESBORRAT. WHAT TO DO?????????????????????
-                }
                 throw new IOException(connection.getResponseMessage() + ": with " + urlSpec + " what " + connection.getResponseCode());
             }
             int bytesRead = 0;
@@ -52,6 +53,11 @@ public class Fetchr {
             }
             return out.toByteArray();
         } finally {
+            Log.d(TAG, "getUrlBytes " + connection.getResponseMessage() + " " + connection.getResponseCode());
+            if (connection.getResponseCode() == HttpURLConnection.HTTP_UNAUTHORIZED) {
+                Intent intent = new Intent(ACTION_TOKEN_UNAUTHORIZED);
+                RacoEnpFibApp.getAppContext().sendBroadcast(intent, AvisosWorker.PERM_PRIVATE);
+            }
             connection.disconnect();
         }
     }
@@ -119,7 +125,7 @@ public class Fetchr {
     public String getDataUrlJson(String url) {
         try {
             AuthState authState = QueryData.getAuthState();
-            Log.d(TAG, "getdataurl autstate==null" + (authState == null));
+            Log.d(TAG, "getdataurl autstate==null " + (authState == null));
             if (authState == null) return "";
             String token = authState.getToken();
             if (token.equals("")) throw new IOException("Empty Token");

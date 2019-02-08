@@ -17,6 +17,7 @@ import android.support.v7.widget.AppCompatTextView;
 import android.support.v7.widget.LinearLayoutCompat;
 import android.text.Html;
 import android.text.method.LinkMovementMethod;
+import android.transition.Fade;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -60,6 +61,7 @@ public class AvisosDetailFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         ViewCompat.setTransitionName(view.findViewById(R.id.item_general), "paridaNumero2");
+        setExitTransition(new Fade(Fade.OUT).setDuration(200));
     }
 
     @Nullable
@@ -206,6 +208,7 @@ public class AvisosDetailFragment extends Fragment {
 
             mAvis.setVist(true);
             new SaverCutre().execute(mAvis);
+
         }
     }
 
