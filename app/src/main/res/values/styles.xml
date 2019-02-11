@@ -18,7 +18,7 @@
 
     <style name="MyAlertDialogStyle" parent="Theme.MaterialComponents.Dialog.Alert">
         <!-- Used for the buttons -->
-        <item name="colorAccent">@color/colorPrimaryVariant</item>
+        <item name="colorAccent">@color/colorOnPrimary</item>
         <!-- Used for the title and text -->
         <item name="android:textColorPrimary">@color/colorOnPrimary</item>
         <!-- Used for the background -->

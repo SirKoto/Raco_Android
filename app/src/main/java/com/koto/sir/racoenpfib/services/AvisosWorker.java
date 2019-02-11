@@ -57,7 +57,8 @@ public class AvisosWorker extends Worker {
     }
 
     public static void SetRecurrentWork() {
-        PeriodicWorkRequest request = new PeriodicWorkRequest.Builder(AvisosWorker.class,
+        PeriodicWorkRequest request = new PeriodicWorkRequest.Builder(
+                AvisosWorker.class,
                 PeriodicWorkRequest.MIN_PERIODIC_INTERVAL_MILLIS,
                 TimeUnit.MILLISECONDS)
                 .setConstraints(new Constraints.Builder()
@@ -73,6 +74,7 @@ public class AvisosWorker extends Worker {
     @NonNull
     @Override
     public Result doWork() {
+        Log.i(TAG, "doWork Avisos");
         if (!isNetworkAvailableAndConnected()) return Result.failure();
         sLock.lock();
         String dataJson = new Fetchr().getDataUrlJson(URL);
@@ -118,7 +120,7 @@ public class AvisosWorker extends Worker {
             //CREEM LA NOTIFICACIO
             UUID uuid = UUID.randomUUID();
             for (Avis avis : renovats) {
-                Log.d(TAG, "Avis uuid " + avis.getUid().toString());
+//                Log.d(TAG, "Avis uuid " + avis.getUid().toString());
                 Intent i = MainActivity.newIntent(getApplicationContext(), avis.getUid());
                 PendingIntent pi = PendingIntent.getActivity(getApplicationContext(), avis.getUid().hashCode(), i, 0);
 

@@ -6,7 +6,7 @@ import com.koto.sir.racoenpfib.LoggerFragment;
 import com.koto.sir.racoenpfib.AbstractPagerFragments;
 import com.koto.sir.racoenpfib.pages.AvisosManagerFragment;
 import com.koto.sir.racoenpfib.pages.CalendarFragment;
-import com.koto.sir.racoenpfib.pages.ConfigFragment;
+import com.koto.sir.racoenpfib.pages.HomeFragment;
 import com.koto.sir.racoenpfib.pages.MobilityFragment;
 
 import java.util.ArrayList;
@@ -153,7 +153,7 @@ public class PagerManager {
                     results.add(MobilityFragment.newInstance());
                     break;
                 case CONFIG_PAGE:
-                    results.add(ConfigFragment.newInstance());
+                    results.add(HomeFragment.newInstance());
                     break;
                 case CALENDAR_PAGE:
                     results.add(CalendarFragment.newInstance());

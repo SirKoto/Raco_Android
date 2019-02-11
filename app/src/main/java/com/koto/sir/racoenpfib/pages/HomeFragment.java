@@ -15,22 +15,19 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.TextView;
 
 import com.koto.sir.racoenpfib.AbstractPagerFragments;
 import com.koto.sir.racoenpfib.ConfigRedirectActivity;
 import com.koto.sir.racoenpfib.R;
 import com.koto.sir.racoenpfib.databases.PagerManager;
 
-import java.util.ArrayList;
 import java.util.List;
 
-public class ConfigFragment extends AbstractPagerFragments {
+public class HomeFragment extends AbstractPagerFragments {
     public static final int[] sImageRes = new int[4];
     public static final int[] sTitleRes = new int[4];
     public static final int[] sInfoRes = new int[4];
-    private static final String TAG = "ConfigFragment";
+    private static final String TAG = "HomeFragment";
 
     static {
         sTitleRes[PagerManager.CONFIG_PAGE] = R.string.configuration;
@@ -54,8 +51,8 @@ public class ConfigFragment extends AbstractPagerFragments {
     RecyclerView mRecyclerView;
 
 
-    public static ConfigFragment newInstance() {
-        return new ConfigFragment();
+    public static HomeFragment newInstance() {
+        return new HomeFragment();
     }
 
     @Nullable

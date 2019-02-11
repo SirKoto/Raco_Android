@@ -6,23 +6,15 @@ import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
-import android.os.PersistableBundle;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
-import android.support.v7.preference.PreferenceFragmentCompat;
 import android.support.v7.widget.Toolbar;
-import android.text.SpannableString;
-import android.text.style.ForegroundColorSpan;
-import android.util.AttributeSet;
 import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 
 import com.koto.sir.racoenpfib.databases.PagerManager;
 import com.koto.sir.racoenpfib.pages.CalendarFragment;
-import com.koto.sir.racoenpfib.pages.ConfigFragment;
+import com.koto.sir.racoenpfib.pages.HomeFragment;
 import com.koto.sir.racoenpfib.pages.LayoutFragment;
 import com.koto.sir.racoenpfib.pages.MobilityFragment;
 import com.koto.sir.racoenpfib.pages.SettingsFragment;
@@ -67,7 +59,7 @@ public class ConfigRedirectActivity extends SingleFragmentActivity {
         Toolbar toolbar = findViewById(R.id.toolbar);
         toolbar.setVisibility(View.VISIBLE);
         toolbar.setTitle(getResources()
-                .getString(ConfigFragment.sTitleRes[mTag]));
+                .getString(HomeFragment.sTitleRes[mTag]));
         toolbar.setTitleTextColor(getResources().getColor(R.color.colorOnPrimary));
 //        toolbar.setSubtitleTextColor(getResources().getColor(R.color.colorOnPrimary));
 

@@ -1,8 +1,8 @@
 package com.koto.sir.racoenpfib.pages;
 
-import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.support.v7.app.AlertDialog;
 import android.content.IntentFilter;
 import android.os.AsyncTask;
 import android.os.Bundle;

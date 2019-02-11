@@ -184,9 +184,9 @@ public class LayoutFragment extends Fragment {
                 Drawable d = getResources().getDrawable(R.drawable.twotone_home_black_24);
                 mImage.setImageDrawable(d);
             } else {
-                String s = getResources().getString(ConfigFragment.sTitleRes[text]);
+                String s = getResources().getString(HomeFragment.sTitleRes[text]);
                 mTextView.setText(s);
-                Drawable d = getResources().getDrawable(ConfigFragment.sImageRes[text]);
+                Drawable d = getResources().getDrawable(HomeFragment.sImageRes[text]);
                 mImage.setImageDrawable(d);
             }
         }

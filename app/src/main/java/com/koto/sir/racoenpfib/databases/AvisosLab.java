@@ -189,13 +189,15 @@ public class AvisosLab {
                             " group by " + AvisosTable.Cols.ASSIGNATURA + ", " +
                             AvisosTable.Cols.TITLE + ", " +
                             AvisosTable.Cols.DATA_MODIFICACIO +
-                            ")", null).close();
+                            ")", null)
+                    .close();
 
             mDatabase.rawQuery("delete from " + AdjuntsTable.NAME +
                     " where " + AdjuntsTable.Cols.UUID_FOREIGN + " not in (" +
                     "select " + AvisosTable.Cols.UUID +
                     " from " + AvisosTable.NAME +
-                    ")", null).close();
+                    ")", null)
+                    .close();
 
 
         } catch (Exception e) {
@@ -289,5 +291,33 @@ public class AvisosLab {
         mDatabase.delete(AvisosTable.NAME, null, null);
         mDatabase.delete(AdjuntsTable.NAME, null, null);
         QueryData.setLastUpdatedAvis(0);
+    }
+
+    public void deleteData(String assig) {
+        Cursor cursor = mDatabase.query(AvisosTable.NAME,
+                new String[]{AvisosTable.Cols.UUID},
+                AvisosTable.Cols.ASSIGNATURA + " = ?",
+                new String[]{assig},
+                null, null, null
+        );
+        cursor.moveToFirst();
+
+        List<String> uuids = new ArrayList<>();
+        while (!cursor.isAfterLast()) {
+            String uuid = cursor.getString(0);
+            uuids.add(uuid);
+            cursor.moveToNext();
+        }
+        Log.d(TAG, "" + uuids);
+        cursor.close();
+        for (String s : uuids) {
+            String[] whereArgs = {s};
+            mDatabase.delete(AvisosTable.NAME,
+                    AvisosTable.Cols.UUID + " = ?",
+                    whereArgs);
+            mDatabase.delete(AdjuntsTable.NAME,
+                    AdjuntsTable.Cols.UUID_FOREIGN + " = ?",
+                    whereArgs);
+        }
     }
 }
