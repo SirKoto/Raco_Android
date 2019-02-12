@@ -13,6 +13,13 @@
             android:title="@string/notificacions_on_title" />
     </android.support.v7.preference.PreferenceCategory>
 
+    <android.support.v7.preference.PreferenceCategory android:title="@string/calendar">
+        <android.support.v7.preference.SwitchPreferenceCompat
+            android:defaultValue="true"
+            android:key="@string/check_calendar_on"
+            android:title="@string/check_calendar_on_title" />
+    </android.support.v7.preference.PreferenceCategory>
+
     <android.support.v7.preference.PreferenceCategory android:title="@string/token">
         <Preference
             android:key="@string/key_delete_token"
