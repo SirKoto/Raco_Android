@@ -1,7 +1,9 @@
 package com.koto.sir.racoenpfib.pages;
 
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.card.MaterialCardView;
@@ -15,6 +17,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.koto.sir.RacoEnpFibApp;
 import com.koto.sir.racoenpfib.AbstractPagerFragments;
 import com.koto.sir.racoenpfib.R;
 import com.koto.sir.racoenpfib.databases.Fetchr;
@@ -35,6 +38,7 @@ public class CalendarFragment extends AbstractPagerFragments {
     private RecyclerView mRecyclerView;
     private List<CalendarClasses> mClasses;
     private View mView;
+    private boolean mToCheck;
 
     public static CalendarFragment newInstance() {
 
@@ -72,14 +76,16 @@ public class CalendarFragment extends AbstractPagerFragments {
     }
 
     @Override
-    public void onStart() {
-        super.onStart();
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(RacoEnpFibApp.getAppContext());
+        mToCheck = preferences.getBoolean(RacoEnpFibApp.getAppContext().getResources().getString(R.string.check_calendar_on), true);
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        new FetchCalendar().execute();
+        if (mToCheck) new FetchCalendar().execute();
     }
 
     private class TimetableHolder extends RecyclerView.ViewHolder {

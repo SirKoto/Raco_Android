@@ -3,7 +3,6 @@ package com.koto.sir.racoenpfib.pages;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.v7.app.AlertDialog;
-import android.content.IntentFilter;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.preference.Preference;
@@ -26,7 +25,7 @@ public class SettingsFragment extends PreferenceFragmentCompat {
             switch (which) {
                 case DialogInterface.BUTTON_POSITIVE:
                     //clicat borrar
-                    AvisosLab.get(getActivity()).deleteData();
+                    AvisosLab.get(getActivity()).deleteData(true);
                     Toast.makeText(getActivity(), "Data deleted", Toast.LENGTH_SHORT).show();
                     Intent intent = new Intent(VisibleFragment.ACTION_JUST_RELOAD);
                     RacoEnpFibApp.getAppContext().sendBroadcast(intent, AvisosWorker.PERM_PRIVATE);

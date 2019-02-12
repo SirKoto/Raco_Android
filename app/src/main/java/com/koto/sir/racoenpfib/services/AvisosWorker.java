@@ -5,12 +5,15 @@ import android.app.Notification;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
+import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.v4.app.NotificationCompat;
 import android.text.Html;
 import android.util.Log;
 
+import com.koto.sir.RacoEnpFibApp;
 import com.koto.sir.racoenpfib.MainActivity;
 import com.koto.sir.racoenpfib.R;
 import com.koto.sir.racoenpfib.databases.AvisosLab;
@@ -83,6 +86,15 @@ public class AvisosWorker extends Worker {
             sLock.unlock();
             return Result.failure();
         }
+
+        //Mirem si l'historial d'avisos està activat
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(RacoEnpFibApp.getAppContext());
+        boolean b = preferences.getBoolean(RacoEnpFibApp.getAppContext().getResources().getString(R.string.historyEnabled), true);
+
+        //Esborrem totes les dades que ara reposarem
+        if (!b)
+            AvisosLab.get(getApplicationContext()).deleteData(false);
+
         final long last = QueryData.getLastUpdatedAvis();
         long newer = last;
         List<Avis> renovats = new ArrayList<>();
@@ -99,6 +111,16 @@ public class AvisosWorker extends Worker {
                     Log.d(TAG, "avis per avis " + avisJson.toString());
                     AvisosLab.parseAvis(avis, avisJson);
                     renovats.add(avis);
+                    if (!b)
+                        continue;
+
+                }
+
+                if (!b) {
+                    Avis avis = new Avis(UUID.randomUUID());
+                    AvisosLab.parseAvis(avis, avisJson);
+                    AvisosLab.get(getApplicationContext()).addAvis(avis);
+
                 }
             }
         } catch (JSONException e) {

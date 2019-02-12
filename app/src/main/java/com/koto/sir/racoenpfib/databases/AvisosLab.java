@@ -4,7 +4,6 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.os.AsyncTask;
 import android.support.annotation.Nullable;
 import android.util.Log;
 
@@ -22,7 +21,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
-import java.util.concurrent.locks.ReentrantLock;
 
 import static com.koto.sir.racoenpfib.databases.DBSchema.*;
 
@@ -287,10 +285,10 @@ public class AvisosLab {
         return new AdjuntCursorWrapper(cursor);
     }
 
-    public void deleteData() {
+    public void deleteData(boolean restartTime) {
         mDatabase.delete(AvisosTable.NAME, null, null);
         mDatabase.delete(AdjuntsTable.NAME, null, null);
-        QueryData.setLastUpdatedAvis(0);
+        if (restartTime) QueryData.setLastUpdatedAvis(0);
     }
 
     public void deleteData(String assig) {

@@ -14,6 +14,10 @@
     <string name="token">Token</string>
     <string name="notifications_on">NotificacionsOn</string>
     <string name="notificacions_on_title">Notifications enabled</string>
+    <string name="historyEnabled">historyEnable651d</string>
+    <string name="historyEnabled_title">Enable the database to store all Avisos</string>
+    <string name="check_calendar_on">CheckCalendarOn</string>
+    <string name="check_calendar_on_title">Check for new timetables at runtime</string>
     <string name="modification_text">Modif:</string>
     <string name="files">Files</string>
     <string name="new_notification">New Avis</string>
